@@ -36,7 +36,7 @@ function BrandInfringementLayout() {
 
 function App() {
   return (
-    <BrowserRouter>
+    <BrowserRouter basename="/Social-Media-Governance-AI">
       <Routes>
 
         <Route path="/" element={<Index />} />
