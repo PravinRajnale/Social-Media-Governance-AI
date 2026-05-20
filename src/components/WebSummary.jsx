@@ -459,10 +459,10 @@ export default function WebSummary() {
      {/* ── Status Cards ── */}
      <section className="mb-3 grid gap-3 grid-cols-5">
        <Link to="/web-incidents" className="block transition hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-brand/50">
-         <StatusCard iconSrc="/status-icons/Incidents.png" value={123} label="Incidents Reported" />
+         <StatusCard iconSrc={`${import.meta.env.BASE_URL}status-icons/Incidents.png`} value={123} label="Incidents Reported" />
        </Link>
-       <StatusCard iconSrc="/status-icons/underReview.png" value={123} label="Under Brand Review" />
-       <StatusCard iconSrc="/status-icons/takedown.png" value={0} label="Takedown Initiated" />
+       <StatusCard iconSrc={`${import.meta.env.BASE_URL}status-icons/underReview.png`} value={123} label="Under Brand Review" />
+       <StatusCard iconSrc={`${import.meta.env.BASE_URL}status-icons/takedown.png`} value={0} label="Takedown Initiated" />
        <div className="col-span-2">
          <StatusCard value={0} label="Closed Incidents">
            <div className="grid grid-cols-3 gap-0.5 border-t border-neutral-200 pt-2 text-center">
