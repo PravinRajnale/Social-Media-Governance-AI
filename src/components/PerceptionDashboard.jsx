@@ -256,7 +256,7 @@ const DEFAULT_SUMMARY_CARDS = [
     { label: "Flipkart", count: 7475, percentage: 38, color: "#8b5cf6" },
     { label: "Facebook", count: 1770, percentage: 9, color: "#10b981" },
     { label: "Instagram", count: 787, percentage: 4, color: "#f59e0b" },
-    { label: "Others", count: 394, percentage: 2, color: "#ef4444" },
+    { label: "Others", count: 394, percentage: 2, color: "#6b7280" },
 ];
  
 // ── Icons (all black) ─────────────────────────────────────────────────────────
