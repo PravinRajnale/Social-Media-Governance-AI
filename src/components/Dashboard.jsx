@@ -1028,6 +1028,27 @@ function Dashboard() {
                 </div>
             </div>
 
+<div
+                style={{
+                    marginBottom: 16,
+                    padding: "10px 16px",
+                    background: "#f9fafb",
+                    border: "0.5px solid #e5e7eb",
+                    borderRadius: 10,
+                    display: "flex",
+                    alignItems: "flex-start",
+                    gap: 8,
+                }}
+            >
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" style={{ flexShrink: 0, marginTop: 1 }}>
+                    <circle cx="12" cy="12" r="10" stroke="#9ca3af" strokeWidth="1.8" />
+                    <line x1="12" y1="8" x2="12" y2="12" stroke="#9ca3af" strokeWidth="1.8" strokeLinecap="round" />
+                    <circle cx="12" cy="16" r="1" fill="#9ca3af" />
+                </svg>
+                <span style={{ fontSize: 14, color: "#6b7280", lineHeight: 1.6 }}>
+                   Data reflects AI-detected brand infringement activities collected across digital platforms for analysis of unauthorized brand usage, impersonation, promotions, and brand misuse. A total of 1,055 incidents were identified across all platforms, with each platform contributing a specific number of detected infringement cases.
+                </span>
+            </div>
             {/* ── Summary cards ── */}
             <section className="mb-4 grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-6">
                 {summaryCards.map((c) => <SummaryCard key={c.label} {...c} />)}

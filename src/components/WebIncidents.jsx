@@ -1,5 +1,5 @@
 import { useState, useMemo } from "react";
-
+ 
 function downloadCSV(data, filename) {
   if (!data?.length) return;
   const headers = Object.keys(data[0]);
@@ -19,8 +19,8 @@ function downloadCSV(data, filename) {
   a.href = url; a.download = `${filename}.csv`; a.click();
   URL.revokeObjectURL(url);
 }
-
-const INCIDENTS = [
+ 
+const INCIDENTS_INITIAL = [
   {
     id: "279298841",
     date: "2026-02-27",
@@ -28,15 +28,15 @@ const INCIDENTS = [
     platform: "Quora",
     category: "Fake Customer Care No",
     description: "NA",
-    url: "https://www.quora.com/profile/Air-India-Customer-Care-Number-1/How-will-I-get-the-refund-of-my-air-ticket-Air-India-customer-care-number-938296-1470-booked-during-the-lockdown-p",
+    url: "https://www.quora.com/profile/Air-India-Customer-Care-Number-1/How-will-I-get-the-refund-of-my-air-ticket-Air-India-customer-care-number-938296-1470-booked-during-the-lockdown-p%22",
     contactNo: "9382961470",
     trademarkUsed: "Brand Name",
     handleName: "Air India Customer Care Number",
     domainHost: "NA",
     priority: "High",
     ticketId: "0",
-    ticketStatus: "NA",
-    takedownStatus: "NA",
+    ticketStatus: "Resolved",
+    takedownStatus: "Completed",
   },
   {
     id: "279236957",
@@ -52,8 +52,8 @@ const INCIDENTS = [
     domainHost: "NA",
     priority: "High",
     ticketId: "0",
-    ticketStatus: "NA",
-    takedownStatus: "NA",
+    ticketStatus: "Unresolved",
+    takedownStatus: "Pending",
   },
   {
     id: "279298851",
@@ -69,8 +69,8 @@ const INCIDENTS = [
     domainHost: "NA",
     priority: "High",
     ticketId: "0",
-    ticketStatus: "NA",
-    takedownStatus: "NA",
+    ticketStatus: "Unresolved",
+    takedownStatus: "Initiated",
   },
   {
     id: "279236981",
@@ -86,8 +86,8 @@ const INCIDENTS = [
     domainHost: "NA",
     priority: "High",
     ticketId: "0",
-    ticketStatus: "NA",
-    takedownStatus: "NA",
+    ticketStatus: "Resolved",
+    takedownStatus: "Pending",
   },
   {
     id: "279298844",
@@ -192,8 +192,8 @@ const INCIDENTS = [
     takedownStatus: "NA",
   },
 ];
-
-
+ 
+ 
 const PriorityBadge = ({ priority }) => {
   const config = {
     Critical: { dot: "bg-red-500",    text: "text-red-700",    bg: "bg-red-50",    border: "border-red-200" },
@@ -212,13 +212,15 @@ const PriorityBadge = ({ priority }) => {
     </span>
   );
 };
-
+ 
 const CategoryBadge = ({ category }) => {
   const config = {
-    "Phishing":        { bg: "bg-red-50",    text: "text-red-600",    border: "border-red-200" },
-    "Social Media":    { bg: "bg-purple-50", text: "text-purple-700", border: "border-purple-200" },
-    "Counterfeit":     { bg: "bg-amber-50",  text: "text-amber-700",  border: "border-amber-200" },
-    "Fake BS Handles": { bg: "bg-[#f3fae0]", text: "text-[#5a8019]",  border: "border-[#cce87a]" },
+    "Phishing":            { bg: "bg-red-50",    text: "text-red-600",    border: "border-red-200" },
+    "Social Media":        { bg: "bg-purple-50", text: "text-purple-700", border: "border-purple-200" },
+    "Counterfeit":         { bg: "bg-amber-50",  text: "text-amber-700",  border: "border-amber-200" },
+    "Fake BS Handles":     { bg: "bg-[#f3fae0]", text: "text-[#5a8019]",  border: "border-[#cce87a]" },
+    "Fake Customer Care No": { bg: "bg-yellow-50", text: "text-yellow-700", border: "border-yellow-200" },
+    "Fake App":            { bg: "bg-pink-50",   text: "text-pink-700",   border: "border-pink-200" },
   };
   const c = config[category] || { bg: "bg-gray-50", text: "text-gray-600", border: "border-gray-200" };
   return (
@@ -230,7 +232,61 @@ const CategoryBadge = ({ category }) => {
     </span>
   );
 };
-
+ 
+// ── Ticket Status chip with optional Mark Resolve button ──────────────────────
+const TicketStatusChip = ({ status, onMarkResolve }) => {
+  if (!status || status === "NA") {
+    return <span className="text-gray-300 text-xs font-medium">—</span>;
+  }
+ 
+  const positive = ["Resolved", "Completed", "Takedown Sent", "Sent"];
+  const isPositive = positive.includes(status);
+ 
+  const CheckIcon = () => (
+    <svg className="w-3.5 h-3.5 text-[#86BC25] flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+      <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+    </svg>
+  );
+ 
+  const WarnIcon = () => (
+    <svg className="w-3.5 h-3.5 text-amber-400 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+      <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4m0 4h.01" />
+      <circle cx="12" cy="12" r="9" />
+    </svg>
+  );
+ 
+  if (status === "Unresolved") {
+    return (
+      <div className="flex flex-col gap-1.5 items-start">
+        {/* Status label */}
+        <span className="inline-flex items-center gap-1 text-xs font-semibold text-gray-600" style={{ whiteSpace: "nowrap" }}>
+          <WarnIcon />
+          Unresolved
+        </span>
+        {/* Mark Resolve button — always visible */}
+        <button
+          onClick={onMarkResolve}
+          className="inline-flex items-center gap-1 px-2 py-1 text-[10px] font-bold text-[#26890d] border border-[#26890d] bg-white hover:bg-[#f3fae0] active:bg-[#e6f5c9] transition-colors"
+          style={{ letterSpacing: "0.02em", whiteSpace: "nowrap", lineHeight: 1.4 }}
+        >
+          <svg className="w-2.5 h-2.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+          </svg>
+          Mark Resolve
+        </button>
+      </div>
+    );
+  }
+ 
+  return (
+    <span className="inline-flex items-center gap-1 text-xs font-semibold text-gray-600" style={{ whiteSpace: "nowrap" }}>
+      {isPositive ? <CheckIcon /> : <WarnIcon />}
+      {status}
+    </span>
+  );
+};
+ 
+// ── Generic status chip (used for takedown status) ────────────────────────────
 const StatusChip = ({ status }) => {
   if (!status || status === "NA") {
     return <span className="text-gray-300 text-xs font-medium">—</span>;
@@ -253,7 +309,7 @@ const StatusChip = ({ status }) => {
     </span>
   );
 };
-
+ 
 const FilterPill = ({ label, value, options, onChange }) => (
   <div className="flex items-center gap-1 text-xs">
     <span className="text-gray-400 font-medium whitespace-nowrap">{label}</span>
@@ -272,8 +328,8 @@ const FilterPill = ({ label, value, options, onChange }) => (
     </select>
   </div>
 );
-
-
+ 
+ 
 const COLUMNS = [
   { label: "ID",                        width: 110 },
   { label: "Date",                      width: 100 },
@@ -283,17 +339,20 @@ const COLUMNS = [
   { label: "Description",               width: 220 },
   { label: "URL",                       width: 200 },
   { label: "Contact No",                width: 130 },
-  { label: "Priority & Trademark Used", width: 170 },
+  { label: "Trademark Used",            width: 160 },
   { label: "Handle Name",               width: 200 },
   { label: "Domain / Host",             width: 170 },
   { label: "Priority",                  width: 110 },
   { label: "Ticket ID",                 width: 90  },
-  { label: "Ticket Status",             width: 150 },
+  { label: "Ticket Status",             width: 160 },
   { label: "Take Down Status",          width: 150 },
 ];
-
-
+ 
+ 
 export default function IncidentsTable() {
+  // ── lift incidents into state so Mark Resolve can mutate it ──
+  const [incidents, setIncidents] = useState(INCIDENTS_INITIAL);
+ 
   const [search, setSearch]     = useState("");
   const [selected, setSelected] = useState(new Set());
   const [filters, setFilters]   = useState({
@@ -303,15 +362,15 @@ export default function IncidentsTable() {
     status:   "All",
     takedown: "All",
   });
-
+ 
   const priorities = ["All", "Critical", "High", "Medium", "Low"];
-  const categories = ["All", ...new Set(INCIDENTS.map((i) => i.category))];
-  const platforms  = ["All", ...new Set(INCIDENTS.map((i) => i.platform))];
-  const statuses   = ["All", ...new Set(INCIDENTS.map((i) => i.ticketStatus))];
-  const takedowns  = ["All", ...new Set(INCIDENTS.map((i) => i.takedownStatus))];
-
+  const categories = ["All", ...new Set(incidents.map((i) => i.category))];
+  const platforms  = ["All", ...new Set(incidents.map((i) => i.platform))];
+  const statuses   = ["All", ...new Set(incidents.map((i) => i.ticketStatus))];
+  const takedowns  = ["All", ...new Set(incidents.map((i) => i.takedownStatus))];
+ 
   const filtered = useMemo(() => {
-    return INCIDENTS.filter((row) => {
+    return incidents.filter((row) => {
       const q = search.toLowerCase();
       return (
         (!q || JSON.stringify(row).toLowerCase().includes(q)) &&
@@ -322,8 +381,17 @@ export default function IncidentsTable() {
         (filters.takedown === "All" || row.takedownStatus === filters.takedown)
       );
     });
-  }, [search, filters]);
-
+  }, [incidents, search, filters]);
+ 
+  // ── Mark a single incident as Resolved ───────────────────────────────────
+  const handleMarkResolve = (id) => {
+    setIncidents((prev) =>
+      prev.map((row) =>
+        row.id === id ? { ...row, ticketStatus: "Resolved" } : row
+      )
+    );
+  };
+ 
   const toggleRow = (id) => {
     setSelected((prev) => {
       const next = new Set(prev);
@@ -331,20 +399,18 @@ export default function IncidentsTable() {
       return next;
     });
   };
-
+ 
   const toggleAll = (checked) => {
     setSelected(checked ? new Set(filtered.map((r) => r.id)) : new Set());
   };
-
+ 
   const allChecked  = filtered.length > 0 && filtered.every((r) => selected.has(r.id));
   const someChecked = filtered.some((r) => selected.has(r.id));
-
+ 
   const handleSampleCSV = () => {
-    // Downloads the currently visible (filtered) rows
     downloadCSV(filtered, "incidents_export");
   };
-
-  // Shared td style factory
+ 
   const tdBase = (extra = {}) => ({
     padding: "10px 12px",
     fontSize: 12,
@@ -356,7 +422,7 @@ export default function IncidentsTable() {
     whiteSpace: "normal",
     ...extra,
   });
-
+ 
   return (
     <div
       style={{
@@ -370,7 +436,7 @@ export default function IncidentsTable() {
       }}
     >
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap%27);
         .tbl-scroll {
           scrollbar-width: thin;
           scrollbar-color: rgba(134,188,37,0.9) #f1f5f9;
@@ -386,7 +452,7 @@ export default function IncidentsTable() {
         .inc-row:hover td { background: #f9fdf2 !important; }
         .inc-row.sel td   { background: #f3fae0 !important; }
       `}</style>
-
+ 
       <div
         className="max-w-screen-2xl mx-auto px-4 py-4"
         style={{ flex: 1, display: "flex", flexDirection: "column", minHeight: 0, width: "100%" }}
@@ -415,7 +481,7 @@ export default function IncidentsTable() {
             </button>
           </div>
         </div>
-
+ 
         {/* ── Filter Bar ── */}
         <div className="bg-white border border-gray-200 px-4 py-3 mb-3 shadow-sm" style={{ flexShrink: 0 }}>
           <div className="flex items-center flex-wrap gap-x-4 gap-y-2 pb-2 border-b border-gray-100 mb-2">
@@ -444,11 +510,11 @@ export default function IncidentsTable() {
                 className="w-full pl-8 pr-3 py-1.5 text-xs border border-gray-200 outline-none focus:border-[#86BC25] transition-colors bg-[#f9f9f9] placeholder:text-gray-400"
               />
             </div>
-            <select className="text-xs border border-gray-200  px-2 py-1.5 outline-none bg-white text-gray-600 hover:border-[#86BC25] transition-colors cursor-pointer">
+            <select className="text-xs border border-gray-200 px-2 py-1.5 outline-none bg-white text-gray-600 hover:border-[#86BC25] transition-colors cursor-pointer">
               <option>Select Action</option>
               <option>Assign</option>
-              <option>Mark Resolved</option>
-              <option>Export Selected</option>
+              {/* <option>Mark Resolved</option>
+              <option>Export Selected</option> */}
             </select>
             <button className="px-3 py-1.5 text-xs font-semibold text-white bg-[#26890d] transition-colors">Submit</button>
             <button className="px-3 py-1.5 text-xs font-semibold text-[#26890d] border-2 border-[#26890d] bg-white transition-colors">Assign</button>
@@ -466,7 +532,7 @@ export default function IncidentsTable() {
             </div>
           </div>
         </div>
-
+ 
         {/* ── Table Card ── */}
         <div
           className="bg-white border border-gray-200 shadow-sm"
@@ -486,7 +552,7 @@ export default function IncidentsTable() {
                 <col style={{ width: 42 }} />
                 {COLUMNS.map((c) => <col key={c.label} style={{ width: c.width }} />)}
               </colgroup>
-
+ 
               <thead>
                 <tr>
                   <th
@@ -531,7 +597,7 @@ export default function IncidentsTable() {
                   ))}
                 </tr>
               </thead>
-
+ 
               <tbody>
                 {filtered.length === 0 ? (
                   <tr>
@@ -544,7 +610,7 @@ export default function IncidentsTable() {
                     const isSel = selected.has(row.id);
                     const rowBg = isSel ? "#f3fae0" : i % 2 === 0 ? "#fff" : "#fafafa";
                     const td = (extra = {}) => ({ ...tdBase({ background: rowBg }), ...extra });
-
+ 
                     return (
                       <tr key={row.id} className={`inc-row${isSel ? " sel" : ""}`}>
                         <td style={td({ textAlign: "center", verticalAlign: "middle" })}>
@@ -577,7 +643,15 @@ export default function IncidentsTable() {
                         <td style={td({ fontFamily: "'DM Mono', monospace", fontSize: 11, color: "#aaa", wordBreak: "break-all" })}>{row.domainHost}</td>
                         <td style={td()}><PriorityBadge priority={row.priority} /></td>
                         <td className="text-center" style={td({ fontFamily: "'DM Mono', monospace", fontSize: 11, color: "#888" })}>{row.ticketId}</td>
-                        <td style={td()}><StatusChip status={row.ticketStatus} /></td>
+ 
+                        {/* ── Ticket Status — uses TicketStatusChip with Mark Resolve ── */}
+                        <td style={td()}>
+                          <TicketStatusChip
+                            status={row.ticketStatus}
+                            onMarkResolve={() => handleMarkResolve(row.id)}
+                          />
+                        </td>
+ 
                         <td style={td()}><StatusChip status={row.takedownStatus} /></td>
                       </tr>
                     );
@@ -586,7 +660,7 @@ export default function IncidentsTable() {
               </tbody>
             </table>
           </div>
-
+ 
           {/* ── Footer ── */}
           <div
             className="flex items-center justify-between px-4 py-2 border-t border-gray-100 bg-[#fafafa]"
@@ -594,14 +668,14 @@ export default function IncidentsTable() {
           >
             <span className="text-xs text-gray-400">
               Showing <span className="font-semibold text-gray-600">{filtered.length}</span> of{" "}
-              <span className="font-semibold text-gray-600">{INCIDENTS.length}</span> results
+              <span className="font-semibold text-gray-600">{incidents.length}</span> results
               {selected.size > 0 && (
                 <span className="ml-2 text-[#86BC25] font-semibold">· {selected.size} selected</span>
               )}
             </span>
           </div>
         </div>
-
+ 
       </div>
     </div>
   );
