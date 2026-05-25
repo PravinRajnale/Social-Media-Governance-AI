@@ -1060,11 +1060,11 @@ function Dashboard() {
             <section className="mb-4 grid gap-3 grid-cols-5">
                 <StatusCard iconSrc={`${import.meta.env.BASE_URL}status-icons/Incidents.png`} value={798} label="Incidents Reported" />
                 <StatusCard iconSrc={`${import.meta.env.BASE_URL}status-icons/underReview.png`} value={798} label="Under Brand Review" />
-                <StatusCard iconSrc={`${import.meta.env.BASE_URL}status-icons/takedown.png`} value={0} label="Takedown Initiated" />
+                <StatusCard iconSrc={`${import.meta.env.BASE_URL}status-icons/takedown.png`} value={1} label="Takedown Initiated" />
                 <div className="col-span-2">
-                    <StatusCard value={0} label="Closed Incidents">
+                    <StatusCard value={1} label="Closed Incidents">
                         <div className="grid grid-cols-3 gap-0.5 border-t border-neutral-200 pt-2 text-center">
-                            {[['0', 'Taken down'], ['0', 'No action'], ['0', 'Recommended to legal']].map(([v, l]) => (
+                            {[['1', 'Taken down'], ['0', 'No action'], ['0', 'Recommended to legal']].map(([v, l]) => (
                                 <div key={l} className="min-w-0 px-0.5">
                                     <p className="text-lg font-semibold tabular-nums text-neutral-900">{v}</p>
                                     <p className="mt-0.5 text-xs font-medium leading-tight text-neutral-500">{l}</p>

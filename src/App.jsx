@@ -28,7 +28,7 @@ function BrandPerceptionLayout() {
 function BrandInfringementLayout() {
   return (
     <div className="flex h-screen flex-col bg-neutral-100 text-neutral-900">
-      <Navbar name="Brand Infringement AI" />
+      <Navbar name="Social Media Governance" />
       <div className="flex min-h-0 flex-1">
         <Sidebar />
         <div className="min-w-0 flex-1 overflow-auto">
