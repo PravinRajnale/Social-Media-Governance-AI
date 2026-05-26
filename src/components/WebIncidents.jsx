@@ -517,7 +517,7 @@ export default function IncidentsTable() {
               <option>Export Selected</option> */}
             </select>
             <button className="px-3 py-1.5 text-xs font-semibold text-white bg-[#26890d] transition-colors">Submit</button>
-            <button className="px-3 py-1.5 text-xs font-semibold text-[#26890d] border-2 border-[#26890d] bg-white transition-colors">Assign</button>
+            {/* <button className="px-3 py-1.5 text-xs font-semibold text-[#26890d] border-2 border-[#26890d] bg-white transition-colors">Assign</button> */}
             <div className="ml-auto flex items-center gap-1.5">
               <span className="text-[9px] text-gray-400 font-semibold uppercase tracking-wider">Columns</span>
               <select className="text-xs border border-gray-200 px-2 py-1.5 outline-none bg-white text-gray-600 hover:border-[#86BC25] transition-colors cursor-pointer">

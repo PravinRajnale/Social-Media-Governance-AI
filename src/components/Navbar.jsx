@@ -42,7 +42,7 @@ function Navbar({ name }) {
       </div>
  
       {/* Center: App switcher — absolutely centred */}
-      <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-20">
+      <div className="absolute right-1 top-1/2 -translate-x-1/2 -translate-y-1/2 z-20">
         <div className="relative">
           <button
             onClick={() => setOpenDropdown(!openDropdown)}
