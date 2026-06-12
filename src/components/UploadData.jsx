@@ -7,7 +7,7 @@ const STEP0_STATS = {
   totalPosts: "19,671",
   platforms: 5,
   languages: 14,
-  timePeriod: "Oct 2025 – Dec 2025",
+  timePeriod: "Jan 2026 – Mar 2026",
 };
 
 const PLATFORM_DATA = [
@@ -19,6 +19,7 @@ const PLATFORM_DATA = [
 ];
 
 const CLASSIFICATION_DATA = [
+  { category: "Suspicious Claims & Information",  pct: 2 },
   { category: "Response Accountability",  pct: 25 },
   { category: "Customer Escalation Signals",          pct: 22 },
   { category: "Resolution Orientation",    pct: 18 },
@@ -230,7 +231,7 @@ function Step2Panel() {
             </tbody>
           </table>
         </div>
-        <div style={{ padding: "20px 24px", display: "grid", gridTemplateColumns: "1fr 1fr", gap: 24, alignItems: "center" }}>
+        {/* <div style={{ padding: "20px 24px", display: "grid", gridTemplateColumns: "1fr 1fr", gap: 24, alignItems: "center" }}>
           <div>
             <SectionLabel text="Sentiment distribution" />
             {[
@@ -252,7 +253,7 @@ function Step2Panel() {
             ))}
           </div>
           <SentimentChart />
-        </div>
+        </div> */}
       </div>
     </FadeIn>
   );

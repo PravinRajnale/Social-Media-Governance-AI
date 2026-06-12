@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, useCallback } from 'react'
+import { useState, useRef, useEffect, useCallback, useMemo } from 'react'
 import { IconChevronDown, IconExternal, IconFunnel } from './icons.jsx'
 import { DateRangePicker } from './DateRangePicker.jsx'
 import {
@@ -106,55 +106,55 @@ const riskHandles = [
 
 const summaryCards = [
     {
-        label: 'Website / App',
+        label: 'Suspicious Website / App',
         value: 123,
         pct: 15.41,
-        iconSrc: `${import.meta.env.BASE_URL}summary-icons/websites.png`,
+        iconSrc: '/summary-icons/websites.png',
         redirectTo: '/web-summary',
         accent: '#639922',
         ringBg: 'rgba(99,153,34,0.12)',
     },
     {
-        label: 'Social Media',
+        label: 'Suspicious Social Media Handles',
         value: 675,
         pct: 84.59,
-        iconSrc: `${import.meta.env.BASE_URL}summary-icons/socialMedia.png`,
+        iconSrc: '/summary-icons/socialMedia.png',
         redirectTo: '/web-summary',
         accent: '#378ADD',
         ringBg: 'rgba(55,138,221,0.12)',
     },
     {
-        label: 'Customer Care',
+        label: 'Suspicious Customer Care Numbers',
         value: 24,
         pct: 3.01,
-        iconSrc: `${import.meta.env.BASE_URL}summary-icons/customerCare.png`,
+        iconSrc: '/summary-icons/customerCare.png',
         redirectTo: '/web-summary',
         accent: '#D85A30',
         ringBg: 'rgba(216,90,48,0.12)',
     },
     {
-        label: 'Job Promotions',
+        label: 'Suspicious Job Promotions',
         value: 161,
         pct: 20.18,
-        iconSrc: `${import.meta.env.BASE_URL}summary-icons/jobPromotions.png`,
+        iconSrc: '/summary-icons/jobPromotions.png',
         redirectTo: '/web-summary',
         accent: '#BA7517',
         ringBg: 'rgba(186,117,23,0.12)',
     },
     {
-        label: 'Offers',
+        label: 'Suspicious Offers',
         value: 62,
         pct: 7.77,
-        iconSrc: `${import.meta.env.BASE_URL}summary-icons/offers.png`,
+        iconSrc: '/summary-icons/offers.png',
         redirectTo: '/web-summary',
         accent: '#1D9E75',
         ringBg: 'rgba(29,158,117,0.12)',
     },
     {
-        label: 'Sponsored Ads',
+        label: 'Suspicious Sponsored Ads',
         value: 10,
         pct: 1.25,
-        iconSrc: `${import.meta.env.BASE_URL}summary-icons/ads.png`,
+        iconSrc: '/summary-icons/ads.png',
         redirectTo: '/web-summary',
         accent: '#534AB7',
         ringBg: 'rgba(83,74,183,0.12)',
@@ -181,22 +181,145 @@ const rawIncidentData = [
 //   { Platform: 'Web Page', count: 1, percentage: 0.13 },
 //   { Platform: 'Whatsapp', count: 1, percentage: 0.13 },
 // ]
-
+const platformVolumeData = {
+  All: [
+    { inserted_date: "21-02-2026", total: 109, active: 40, in_progress: 39, closed: 30 },
+    { inserted_date: "22-02-2026", total: 116, active: 36, in_progress: 40, closed: 40 },
+    { inserted_date: "23-02-2026", total: 113, active: 43, in_progress: 40, closed: 30 },
+    { inserted_date: "24-02-2026", total: 109, active: 50, in_progress: 29, closed: 30 },
+    { inserted_date: "25-02-2026", total: 117, active: 67, in_progress: 26, closed: 24 },
+    { inserted_date: "26-02-2026", total: 118, active: 68, in_progress: 25, closed: 25 },
+    { inserted_date: "27-02-2026", total: 116, active: 60, in_progress: 36, closed: 20 },
+    ], // 798
+ "YouTube Videos": [
+  { inserted_date: "21-02-2026", total: 25, active: 13, in_progress: 7, closed: 5 },
+  { inserted_date: "22-02-2026", total: 30, active: 15, in_progress: 9, closed: 6 },
+  { inserted_date: "23-02-2026", total: 28, active: 14, in_progress: 8, closed: 6 },
+  { inserted_date: "24-02-2026", total: 22, active: 13, in_progress: 4, closed: 5 },
+  { inserted_date: "25-02-2026", total: 29, active: 15, in_progress: 8, closed: 6 },
+  { inserted_date: "26-02-2026", total: 26, active: 13, in_progress: 8, closed: 5 },
+  { inserted_date: "27-02-2026", total: 30, active: 13, in_progress: 12, closed: 5 },
+],
+ 
+Facebook: [
+  { inserted_date: "21-02-2026", total: 18, active: 9, in_progress: 5, closed: 4 },
+  { inserted_date: "22-02-2026", total: 17, active: 8, in_progress: 5, closed: 4 },
+  { inserted_date: "23-02-2026", total: 19, active: 10, in_progress: 5, closed: 4 },
+  { inserted_date: "24-02-2026", total: 16, active: 8, in_progress: 5, closed: 3 },
+  { inserted_date: "25-02-2026", total: 20, active: 10, in_progress: 6, closed: 4 },
+  { inserted_date: "26-02-2026", total: 18, active: 9, in_progress: 5, closed: 4 },
+  { inserted_date: "27-02-2026", total: 18, active: 9, in_progress: 5, closed: 4 },
+],
+ 
+Instagram: [
+  { inserted_date: "21-02-2026", total: 15, active: 8, in_progress: 4, closed: 3 },
+  { inserted_date: "22-02-2026", total: 16, active: 8, in_progress: 5, closed: 3 },
+  { inserted_date: "23-02-2026", total: 14, active: 7, in_progress: 4, closed: 3 },
+  { inserted_date: "24-02-2026", total: 17, active: 8, in_progress: 5, closed: 4 },
+  { inserted_date: "25-02-2026", total: 15, active: 8, in_progress: 4, closed: 3 },
+  { inserted_date: "26-02-2026", total: 18, active: 9, in_progress: 5, closed: 4 },
+  { inserted_date: "27-02-2026", total: 15, active: 8, in_progress: 4, closed: 3 },
+],
+ 
+Twitter: [
+  { inserted_date: "21-02-2026", total: 12, active: 6, in_progress: 4, closed: 2 },
+  { inserted_date: "22-02-2026", total: 13, active: 7, in_progress: 4, closed: 2 },
+  { inserted_date: "23-02-2026", total: 11, active: 6, in_progress: 3, closed: 2 },
+  { inserted_date: "24-02-2026", total: 14, active: 7, in_progress: 4, closed: 3 },
+  { inserted_date: "25-02-2026", total: 12, active: 6, in_progress: 4, closed: 2 },
+  { inserted_date: "26-02-2026", total: 13, active: 7, in_progress: 4, closed: 2 },
+  { inserted_date: "27-02-2026", total: 11, active: 6, in_progress: 3, closed: 2 },
+],
+ 
+Pinterest: [
+  { inserted_date: "21-02-2026", total: 12, active: 6, in_progress: 4, closed: 2 },
+  { inserted_date: "22-02-2026", total: 11, active: 6, in_progress: 3, closed: 2 },
+  { inserted_date: "23-02-2026", total: 13, active: 7, in_progress: 4, closed: 2 },
+  { inserted_date: "24-02-2026", total: 12, active: 6, in_progress: 4, closed: 2 },
+  { inserted_date: "25-02-2026", total: 11, active: 6, in_progress: 3, closed: 2 },
+  { inserted_date: "26-02-2026", total: 12, active: 6, in_progress: 4, closed: 2 },
+  { inserted_date: "27-02-2026", total: 12, active: 6, in_progress: 4, closed: 2 },
+], // 83
+ 
+Telegram: [
+  { inserted_date: "21-02-2026", total: 10, active: 5, in_progress: 3, closed: 2 },
+  { inserted_date: "22-02-2026", total: 12, active: 6, in_progress: 4, closed: 2 },
+  { inserted_date: "23-02-2026", total: 11, active: 6, in_progress: 3, closed: 2 },
+  { inserted_date: "24-02-2026", total: 9, active: 5, in_progress: 3, closed: 1 },
+  { inserted_date: "25-02-2026", total: 13, active: 7, in_progress: 4, closed: 2 },
+  { inserted_date: "26-02-2026", total: 12, active: 6, in_progress: 4, closed: 2 },
+  { inserted_date: "27-02-2026", total: 12, active: 6, in_progress: 4, closed: 2 },
+], // 79
+ 
+Quora: [
+  { inserted_date: "21-02-2026", total: 6, active: 3, in_progress: 2, closed: 1 },
+  { inserted_date: "22-02-2026", total: 7, active: 4, in_progress: 2, closed: 1 },
+  { inserted_date: "23-02-2026", total: 6, active: 3, in_progress: 2, closed: 1 },
+  { inserted_date: "24-02-2026", total: 7, active: 4, in_progress: 2, closed: 1 },
+  { inserted_date: "25-02-2026", total: 6, active: 3, in_progress: 2, closed: 1 },
+  { inserted_date: "26-02-2026", total: 7, active: 4, in_progress: 2, closed: 1 },
+  { inserted_date: "27-02-2026", total: 6, active: 3, in_progress: 2, closed: 1 },
+], // 45
+ 
+Bebee: [
+  { inserted_date: "21-02-2026", total: 5, active: 3, in_progress: 1, closed: 1 },
+  { inserted_date: "22-02-2026", total: 4, active: 2, in_progress: 1, closed: 1 },
+  { inserted_date: "23-02-2026", total: 5, active: 3, in_progress: 1, closed: 1 },
+  { inserted_date: "24-02-2026", total: 5, active: 3, in_progress: 1, closed: 1 },
+  { inserted_date: "25-02-2026", total: 5, active: 3, in_progress: 1, closed: 1 },
+  { inserted_date: "26-02-2026", total: 5, active: 3, in_progress: 1, closed: 1 },
+  { inserted_date: "27-02-2026", total: 5, active: 3, in_progress: 1, closed: 1 },
+], // 34
+ 
+"Kit Job": [
+  { inserted_date: "21-02-2026", total: 3, active: 1, in_progress: 1, closed: 1 },
+  { inserted_date: "22-02-2026", total: 4, active: 2, in_progress: 1, closed: 1 },
+  { inserted_date: "23-02-2026", total: 3, active: 1, in_progress: 1, closed: 1 },
+  { inserted_date: "24-02-2026", total: 4, active: 2, in_progress: 1, closed: 1 },
+  { inserted_date: "25-02-2026", total: 3, active: 1, in_progress: 1, closed: 1 },
+  { inserted_date: "26-02-2026", total: 4, active: 2, in_progress: 1, closed: 1 },
+  { inserted_date: "27-02-2026", total: 3, active: 1, in_progress: 1, closed: 1 },
+], // 24
+ 
+Reddit: [
+  { inserted_date: "21-02-2026", total: 2, active: 1, in_progress: 1, closed: 0 },
+  { inserted_date: "22-02-2026", total: 2, active: 1, in_progress: 1, closed: 0 },
+  { inserted_date: "23-02-2026", total: 3, active: 1, in_progress: 1, closed: 1 },
+  { inserted_date: "24-02-2026", total: 2, active: 1, in_progress: 1, closed: 0 },
+  { inserted_date: "25-02-2026", total: 2, active: 1, in_progress: 1, closed: 0 },
+  { inserted_date: "26-02-2026", total: 2, active: 1, in_progress: 1, closed: 0 },
+  { inserted_date: "27-02-2026", total: 2, active: 1, in_progress: 1, closed: 0 },
+], // 15
+ 
+"App Store": [
+  { inserted_date: "21-02-2026", total: 1, active: 1, in_progress: 0, closed: 0 },
+  { inserted_date: "24-02-2026", total: 1, active: 1, in_progress: 0, closed: 0 },
+  { inserted_date: "27-02-2026", total: 2, active: 1, in_progress: 1, closed: 0 },
+], // 4
+ 
+"Web Page": [
+  { inserted_date: "25-02-2026", total: 1, active: 1, in_progress: 0, closed: 0 },
+], // 1
+ 
+Whatsapp: [
+  { inserted_date: "26-02-2026", total: 1, active: 1, in_progress: 0, closed: 0 },
+], // 1
+};
 
 const Platforms = [
-    { Platform: 'YouTube Videos', count: 190, percentage: 23.81, logo: `${import.meta.env.BASE_URL}channel-logos/Youtube.png` },
-    { Platform: 'Facebook', count: 126, percentage: 15.79, logo: `${import.meta.env.BASE_URL}channel-logos/Facebook.png` },
-    { Platform: 'Instagram', count: 110, percentage: 13.78, logo: `${import.meta.env.BASE_URL}channel-logos/Insta.png` },
-    { Platform: 'Twitter', count: 86, percentage: 10.78, logo: `${import.meta.env.BASE_URL}channel-logos/X.png` },
-    { Platform: 'Pinterest', count: 83, percentage: 10.4, logo: `${import.meta.env.BASE_URL}channel-logos/Pinterest.png` },
-    { Platform: 'Telegram', count: 79, percentage: 9.9, logo: `${import.meta.env.BASE_URL}channel-logos/Telegram.png` },
-    { Platform: 'Quora', count: 45, percentage: 5.64, logo: `${import.meta.env.BASE_URL}channel-logos/Quora.png` },
-    { Platform: 'Bebee', count: 34, percentage: 4.26, logo: `${import.meta.env.BASE_URL}channel-logos/Bebee.png` },
-    { Platform: 'Kit Job', count: 24, percentage: 3.01, logo: `${import.meta.env.BASE_URL}channel-logos/KitJob.png` },
-    { Platform: 'Reddit', count: 15, percentage: 1.88, logo: `${import.meta.env.BASE_URL}channel-logos/Reddit.png` },
-    { Platform: 'App Store', count: 4, percentage: 0.5, logo: `${import.meta.env.BASE_URL}channel-logos/AppStore.png` },
-    { Platform: 'Web Page', count: 1, percentage: 0.13, logo: `${import.meta.env.BASE_URL}channel-logos/WebPage.png` },
-    { Platform: 'Whatsapp', count: 1, percentage: 0.13, logo: `${import.meta.env.BASE_URL}channel-logos/Whatsapp.png` },
+    { Platform: 'YouTube Videos', count: 190, percentage: 23.81, logo: '/channel-logos/Youtube.png' },
+    { Platform: 'Facebook', count: 126, percentage: 15.79, logo: '/channel-logos/Facebook.png' },
+    { Platform: 'Instagram', count: 110, percentage: 13.78, logo: '/channel-logos/Insta.png' },
+    { Platform: 'Twitter', count: 86, percentage: 10.78, logo: '/channel-logos/X.png' },
+    { Platform: 'Pinterest', count: 83, percentage: 10.4, logo: '/channel-logos/Pinterest.png' },
+    { Platform: 'Telegram', count: 79, percentage: 9.9, logo: '/channel-logos/Telegram.png' },
+    { Platform: 'Quora', count: 45, percentage: 5.64, logo: '/channel-logos/Quora.png' },
+    { Platform: 'Bebee', count: 34, percentage: 4.26, logo: '/channel-logos/Bebee.png' },
+    { Platform: 'Kit Job', count: 24, percentage: 3.01, logo: '/channel-logos/KitJob.png' },
+    { Platform: 'Reddit', count: 15, percentage: 1.88, logo: '/channel-logos/Reddit.png' },
+    { Platform: 'App Store', count: 4, percentage: 0.5, logo: '/channel-logos/AppStore.png' },
+    { Platform: 'Web Page', count: 1, percentage: 0.13, logo: '/channel-logos/WebPage.png' },
+    { Platform: 'Whatsapp', count: 1, percentage: 0.13, logo: '/channel-logos/Whatsapp.png' },
 ]
 
 // ─── Aggregation helper ───────────────────────────────────────────────────────
@@ -218,7 +341,17 @@ function aggregateData(data, range) {
             const day = d.getDay()
             const monday = new Date(d)
             monday.setDate(d.getDate() - day + (day === 0 ? -6 : 1))
-            const key = monday.toLocaleDateString('en-GB', { day: '2-digit', month: 'short' })
+            const sunday = new Date(monday);
+            sunday.setDate(monday.getDate() + 6);
+
+            const key =
+            `${monday.toLocaleDateString('en-GB', {
+                day: '2-digit',
+                month: 'short',
+            })} - ${sunday.toLocaleDateString('en-GB', {
+                day: '2-digit',
+                month: 'short',
+            })}`;
             if (!weeks[key]) weeks[key] = { total: 0, active: 0, in_progress: 0, closed: 0 }
             weeks[key].total += row.total; weeks[key].active += row.active
             weeks[key].in_progress += row.in_progress; weeks[key].closed += row.closed
@@ -404,10 +537,10 @@ function ChartMenu({ title, csvData, chartRef, onExpand }) {
 // ─── Volume chart helpers ─────────────────────────────────────────────────────
 
 const LEGEND_ITEMS = [
-    { key: 'incidentsReported', label: 'Incidents Reported', color: '#60A5FA' },
-    { key: 'underBrandReview', label: 'Under Brand Review', color: '#FB923C' },
-    { key: 'takedownInitiated', label: 'Takedown Initiated', color: '#eab308' },
-    { key: 'closedIncidents', label: 'Closed Incidents', color: '#65A30D' },
+    { key: 'incidentsReported', label: 'Incidents Reported', color: '#3d5224' },
+    { key: 'underBrandReview', label: 'Under Brand Review', color: '#5E8E12' },
+    { key: 'takedownInitiated', label: 'Takedown Initiated', color: '#b7d586' },
+    { key: 'closedIncidents', label: 'Closed Incidents', color: '#86BC25' },
 ]
 
 function VolumeTooltip({ active, payload, label }) {
@@ -967,7 +1100,7 @@ function LollipopChart({ data, color = "#86bc25", maxWidth = 480, xTicks = [0, 3
 }
 
 
-// ─── Dashboard ────────────────────────────────────────────────────────────────
+//Dashboard
 
 const TIME_OPTIONS = ['daily', 'weekly', 'monthly']
 
@@ -977,6 +1110,7 @@ function Dashboard() {
     const dropdownRef = useRef(null)
 
     const [expanded, setExpanded] = useState(null)
+    const [selectedPlatform, setSelectedPlatform] = useState(null);
 
     const volumeRef = useRef(null)
     const threatRef = useRef(null)
@@ -994,6 +1128,24 @@ function Dashboard() {
     }, [])
 
     const chartData = aggregateData(rawIncidentData, timeRange)
+    // const filteredChartData = useMemo(() => {
+    //     if (!selectedPlatform) {
+    //         return platformVolumeData.All;
+    //     }
+
+    //     return platformVolumeData[selectedPlatform] || [];
+    // }, [selectedPlatform]);
+    const filteredChartData = useMemo(() => {
+    const sourceData = selectedPlatform
+        ? platformVolumeData[selectedPlatform]
+        : platformVolumeData.All;;
+
+    return aggregateData(sourceData, timeRange);
+    }, [selectedPlatform, timeRange]);
+
+    const selectedPlatformData = Platforms.find(
+        (p) => p.Platform === selectedPlatform
+    );
 
     // CSV datasets per chart
     const csvMap = {
@@ -1028,7 +1180,7 @@ function Dashboard() {
                 </div>
             </div>
 
-<div
+            {/* <div
                 style={{
                     marginBottom: 16,
                     padding: "10px 16px",
@@ -1048,7 +1200,7 @@ function Dashboard() {
                 <span style={{ fontSize: 14, color: "#6b7280", lineHeight: 1.6 }}>
                    Data reflects AI-detected brand infringement activities collected across digital platforms for analysis of unauthorized brand usage, impersonation, promotions, and brand misuse. A total of 1,055 incidents were identified across all platforms, with each platform contributing a specific number of detected infringement cases.
                 </span>
-            </div>
+            </div> */}
             {/* ── Summary cards ── */}
             <section className="mb-4 grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-6">
                 {summaryCards.map((c) => <SummaryCard key={c.label} {...c} />)}
@@ -1058,13 +1210,13 @@ function Dashboard() {
 
             {/* ── Status cards ── */}
             <section className="mb-4 grid gap-3 grid-cols-5">
-                <StatusCard iconSrc={`${import.meta.env.BASE_URL}status-icons/Incidents.png`} value={798} label="Incidents Reported" />
-                <StatusCard iconSrc={`${import.meta.env.BASE_URL}status-icons/underReview.png`} value={798} label="Under Brand Review" />
-                <StatusCard iconSrc={`${import.meta.env.BASE_URL}status-icons/takedown.png`} value={1} label="Takedown Initiated" />
+                <StatusCard iconSrc="/status-icons/Incidents.png" value={798} label="Incidents Reported" />
+                <StatusCard iconSrc="/status-icons/underReview.png" value={798} label="Under Brand Review" />
+                <StatusCard iconSrc="/status-icons/takedown.png" value={59} label="Closed Incidents" />
                 <div className="col-span-2">
-                    <StatusCard value={1} label="Closed Incidents">
+                    <StatusCard label="Takedown status">
                         <div className="grid grid-cols-3 gap-0.5 border-t border-neutral-200 pt-2 text-center">
-                            {[['1', 'Taken down'], ['0', 'No action'], ['0', 'Recommended to legal']].map(([v, l]) => (
+                            {[['38', 'Taken down'], ['37', 'No action'], ['48', 'Recommended to legal']].map(([v, l]) => (
                                 <div key={l} className="min-w-0 px-0.5">
                                     <p className="text-lg font-semibold tabular-nums text-neutral-900">{v}</p>
                                     <p className="mt-0.5 text-xs font-medium leading-tight text-neutral-500">{l}</p>
@@ -1081,7 +1233,20 @@ function Dashboard() {
                 {/* Incidents by Volume */}
                 <div ref={volumeRef} className="relative flex flex-col justify-between    border border-neutral-200 bg-white p-6 shadow-sm lg:col-span-2">
                     <div className="mb-6 flex items-center justify-between gap-4">
-                        <h3 className="text-base font-semibold text-neutral-900">Incidents by Volume</h3>
+                        <h3 className="flex items-center gap-2 text-base font-semibold text-neutral-900">
+                            Incidents by Volume
+
+                            {selectedPlatformData && (
+                                <span className="ml-2 flex items-center gap-1 text-sm font-normal text-neutral-500">
+                                    (<img
+                                        src={selectedPlatformData.logo}
+                                        alt={selectedPlatformData.Platform}
+                                        className="h-4 w-4 object-contain"
+                                    />
+                                    <span>{selectedPlatformData.Platform}</span>)
+                                </span>
+                            )}
+                        </h3>
                         <div className="flex items-center gap-2">
                             {/* Time range dropdown */}
                             <div className="relative" ref={dropdownRef}>
@@ -1115,22 +1280,58 @@ function Dashboard() {
                         </div>
                     </div>
                     <ResponsiveContainer width="100%" height={260}>
-                        <ComposedChart data={chartData} margin={{ top: 10, right: 10, left: -10, bottom: 0 }}>
-                            <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#BBBCBC" />
+                        <ComposedChart
+                            data={filteredChartData}
+                            margin={{ top: 5, right: 5, left: -30, bottom: 0 }}
+                        >
+                            <CartesianGrid
+                            strokeDasharray="3 3"
+                            vertical={false}
+                            stroke="#BBBCBC"
+                            />
+
                             <XAxis dataKey="date" tick={{ fontSize: 12 }} />
                             <YAxis tick={{ fontSize: 12 }} />
-                            <Tooltip content={<VolumeTooltip />} cursor={{ fill: 'rgba(0,0,0,0.04)' }} />
-                            <Bar dataKey="underBrandReview" fill="#FB923C" radius={[0, 0, 0, 0]} barSize={40} />
-                            <Line dataKey="incidentsReported" stroke="#60A5FA" strokeWidth={0} dot={{ r: 6, fill: '#60A5FA', strokeWidth: 0 }} activeDot={{ r: 7 }} />
-                            <Line dataKey="takedownInitiated" stroke="#eab308" strokeWidth={0} dot={{ r: 6, fill: '#eab308', strokeWidth: 0 }} activeDot={{ r: 7 }} />
-                            <Line dataKey="closedIncidents" stroke="#65A30D" strokeWidth={0} dot={{ r: 6, fill: '#65A30D', strokeWidth: 0 }} activeDot={{ r: 7 }} />
+
+                            <Tooltip
+                            content={<VolumeTooltip />}
+                            cursor={{ fill: "rgba(0,0,0,0.04)" }}
+                            />
+
+                            <Bar
+                            dataKey="incidentsReported"
+                            fill="#3d5224"
+                            barSize={18}
+                            radius={[0, 0, 0, 0]}
+                            />
+
+                            <Bar
+                            dataKey="takedownInitiated"
+                            fill="#b7d586"
+                            barSize={18}
+                            radius={[0, 0, 0, 0]}
+                            />
+
+                            <Bar
+                            dataKey="closedIncidents"
+                            fill="#86BC25"
+                            barSize={18}
+                            radius={[0, 0, 0, 0]}
+                            />
+
+                            <Bar
+                            dataKey="underBrandReview"
+                            fill="#5E8E12"
+                            barSize={18}
+                            radius={[0, 0, 0, 0]}
+                            />
                         </ComposedChart>
                     </ResponsiveContainer>
                     <VolumeLegend />
                 </div>
 
                 {/* Platform Distribution */}
-                <div ref={platformRef} className="   border border-neutral-200 bg-white p-6 shadow-sm">
+                <div ref={platformRef} className=" border border-neutral-200 bg-white p-6 shadow-sm">
                     <div className="mb-6 flex items-center justify-between gap-3">
                         <h3 className="text-base font-semibold text-neutral-900">Platform Distribution</h3>
                         <ChartMenu
@@ -1140,23 +1341,22 @@ function Dashboard() {
                             onExpand={() => setExpanded('platform')}
                         />
                     </div>
-                    {/* <ul className="max-h-[300px] space-y-5 overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-neutral-300 scrollbar-track-transparent">
-            {Platforms.map((ch) => (
-              <li key={ch.Platform}>
-                <div className="mb-1.5 flex justify-between text-sm">
-                    <img src="/Youtube.png" alt="YT Logo" />
-                  <span className="font-medium text-neutral-800">{ch.Platform}</span>
-                  <span className="tabular-nums text-neutral-500">{ch.percentage}%</span>
-                </div>
-                <div className="h-2.5 overflow-hidden  bg-neutral-100">
-                  <div className="h-full  bg-brand transition-[width] duration-500" style={{ width: `${ch.percentage}%` }} />
-                </div>
-              </li>
-            ))}
-          </ul> */}
                     <ul className="max-h-[300px] space-y-5 overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-neutral-300 scrollbar-track-transparent">
                         {Platforms.map((ch) => (
-                            <li key={ch.Platform}>
+                            <li
+                                key={ch.Platform}
+                                onClick={() =>
+                                setSelectedPlatform(
+                                    selectedPlatform === ch.Platform ? null : ch.Platform
+                                )
+                                }
+                                className={`cursor-pointer rounded-md p-2 transition-all
+                                ${
+                                    selectedPlatform === ch.Platform
+                                    ? "bg-orange-50 border border-orange-200"
+                                    : "hover:bg-neutral-50"
+                                }`}
+                            >
                                 <div className="mb-1.5 flex items-center justify-between gap-3 text-sm">
 
                                     {/* Left Section */}
@@ -1178,11 +1378,8 @@ function Dashboard() {
                                     </span>
                                 </div>
 
-                                <div className="h-2.5 overflow-hidden bg-neutral-100">
-                                    <div
-                                        className="h-full bg-brand transition-[width] duration-500"
-                                        style={{ width: `${ch.percentage}%` }}
-                                    />
+                                <div className="h-2.5 overflow-hidden  bg-neutral-100">
+                                    <div className="h-full  bg-brand transition-[width] duration-500" style={{ width: `${ch.percentage}%` }} />
                                 </div>
                             </li>
                         ))}
@@ -1266,7 +1463,7 @@ function Dashboard() {
                     {/* Regional Channel Share */}
                     <div ref={regionalRef} className="   border border-neutral-200 bg-white p-5 shadow-sm">
                         <div className="mb-4 flex items-center justify-between gap-3">
-                            <h3 className="text-base font-semibold text-neutral-900">Regional Channel Share</h3>
+                            <h3 className="text-base font-semibold text-neutral-900">Mentions by Channel</h3>
                             <div className="flex items-center gap-2">
 
                                 <ChartMenu
@@ -1348,7 +1545,7 @@ function Dashboard() {
             </ResponsiveContainer>
           </div> */}
 
-                    <div
+                    {/* <div
                         ref={contactsRef}
                         className="border border-neutral-200 bg-white p-5 shadow-sm"
                     >
@@ -1370,7 +1567,7 @@ function Dashboard() {
                                 maxWidth={600}
                             />
                         </div>
-                    </div>
+                    </div> */}
 
                     {/* Top Handles */}
                     {/*           <div ref={handlesRef} className="   border border-neutral-200 bg-white p-5 shadow-sm">
@@ -1403,11 +1600,11 @@ function Dashboard() {
             </ResponsiveContainer>
           </div> */}
 
-                    <div
+                    {/* <div
                         ref={handlesRef}
                         className="border border-neutral-200 bg-white p-5 shadow-sm"
                     >
-                        {/* Header */}
+                       
                         <div className="mb-4 flex items-center justify-between gap-3">
                             <h3 className="text-base font-semibold text-neutral-900">Top Handles</h3>
                             <ChartMenu
@@ -1418,10 +1615,9 @@ function Dashboard() {
                             />
                         </div>
 
-                        {/* Treemap — fills full card width automatically */}
+             
                         <Treemap data={riskHandles} height={265} />
 
-                        {/* Legend */}
                         <ul className="mt-3 flex flex-wrap gap-x-4 gap-y-1.5 text-[11px] text-neutral-600">
                             {riskHandles.map((s) => (
                                 <li key={s.channel} className="flex items-center gap-1.5">
@@ -1434,7 +1630,7 @@ function Dashboard() {
                                 </li>
                             ))}
                         </ul>
-                    </div>
+                    </div> */}
 
                 </div>
             </section>
@@ -1442,16 +1638,52 @@ function Dashboard() {
             {/* ── Expand Modals ── */}
             {expanded === 'volume' && (
                 <ExpandModal title="Incidents by Volume" onClose={() => setExpanded(null)}>
-                    <ResponsiveContainer width="100%" height={400}>
-                        <ComposedChart data={chartData} margin={{ top: 10, right: 20, left: 0, bottom: 0 }}>
-                            <CartesianGrid vertical={false} strokeDasharray="3 3" stroke="#BBBCBC" />
-                            <XAxis dataKey="date" tick={{ fontSize: 12, fill: '#9ca3af' }} axisLine={false} tickLine={false} />
-                            <YAxis tick={{ fontSize: 12, fill: '#9ca3af' }} axisLine={false} tickLine={false} />
-                            <Tooltip content={<VolumeTooltip />} cursor={{ fill: 'rgba(0,0,0,0.04)' }} />
-                            <Bar dataKey="underBrandReview" fill="#FB923C" radius={[3, 3, 0, 0]} barSize={40} />
-                            <Line dataKey="incidentsReported" stroke="#60A5FA" strokeWidth={0} dot={{ r: 6, fill: '#60A5FA', strokeWidth: 0 }} activeDot={{ r: 7 }} />
-                            <Line dataKey="takedownInitiated" stroke="#eab308" strokeWidth={0} dot={{ r: 6, fill: '#eab308', strokeWidth: 0 }} activeDot={{ r: 7 }} />
-                            <Line dataKey="closedIncidents" stroke="#65A30D" strokeWidth={0} dot={{ r: 6, fill: '#65A30D', strokeWidth: 0 }} activeDot={{ r: 7 }} />
+                    <ResponsiveContainer width="100%" height={350}>
+                        <ComposedChart
+                            data={filteredChartData}
+                            margin={{ top: 5, right: 5, left: -30, bottom: 0 }}
+                        >
+                            <CartesianGrid
+                            strokeDasharray="3 3"
+                            vertical={false}
+                            stroke="#BBBCBC"
+                            />
+
+                            <XAxis dataKey="date" tick={{ fontSize: 12 }} />
+                            <YAxis tick={{ fontSize: 12 }} />
+
+                            <Tooltip
+                            content={<VolumeTooltip />}
+                            cursor={{ fill: "rgba(0,0,0,0.04)" }}
+                            />
+
+                            <Bar
+                            dataKey="incidentsReported"
+                            fill="#3d5224"
+                            barSize={18}
+                            radius={[0, 0, 0, 0]}
+                            />
+
+                            <Bar
+                            dataKey="takedownInitiated"
+                            fill="#b7d586"
+                            barSize={18}
+                            radius={[0, 0, 0, 0]}
+                            />
+
+                            <Bar
+                            dataKey="closedIncidents"
+                            fill="#86BC25"
+                            barSize={18}
+                            radius={[0, 0, 0, 0]}
+                            />
+
+                            <Bar
+                            dataKey="underBrandReview"
+                            fill="#5E8E12"
+                            barSize={18}
+                            radius={[0, 0, 0, 0]}
+                            />
                         </ComposedChart>
                     </ResponsiveContainer>
                     <VolumeLegend />
@@ -1509,7 +1741,7 @@ function Dashboard() {
             )}
 
             {expanded === 'regional' && (
-                <ExpandModal title="Regional Channel Share" onClose={() => setExpanded(null)}>
+                <ExpandModal title="Mentions by Channel" onClose={() => setExpanded(null)}>
                     <div className="flex flex-row items-center justify-center gap-12 py-6">
                         <ResponsiveContainer width={280} height={280}>
                             <PieChart>
@@ -1599,13 +1831,43 @@ function Dashboard() {
                 <ExpandModal title="Platform Distribution" onClose={() => setExpanded(null)}>
                     <ul className="space-y-5 px-4 py-2">
                         {Platforms.map((ch) => (
-                            <li key={ch.Platform}>
-                                <div className="mb-1.5 flex justify-between text-sm">
-                                    <span className="font-medium text-neutral-800">{ch.Platform}</span>
-                                    <span className="tabular-nums text-neutral-500">{ch.count} &nbsp;·&nbsp; {ch.percentage}%</span>
+                            <li
+                                key={ch.Platform}
+                                onClick={() =>
+                                setSelectedPlatform(
+                                    selectedPlatform === ch.Platform ? null : ch.Platform
+                                )
+                                }
+                                className={`cursor-pointer rounded-md p-2 transition-all
+                                ${
+                                    selectedPlatform === ch.Platform
+                                    ? "bg-orange-50 border border-orange-200"
+                                    : "hover:bg-neutral-50"
+                                }`}
+                            >
+                                <div className="mb-1.5 flex items-center justify-between gap-3 text-sm">
+
+                                    {/* Left Section */}
+                                    <div className="flex items-center gap-2 min-w-0">
+                                        <img
+                                            src={ch.logo}
+                                            alt={ch.Platform}
+                                            className="h-5 w-5 object-contain shrink-0"
+                                        />
+
+                                        <span className="truncate font-medium text-neutral-800">
+                                            {ch.Platform}
+                                        </span>
+                                    </div>
+
+                                    {/* Right Section */}
+                                    <span className="tabular-nums text-neutral-500 shrink-0">
+                                        {ch.percentage}%
+                                    </span>
                                 </div>
-                                <div className="h-3 overflow-hidden bg-neutral-100">
-                                    <div className="h-full bg-brand transition-[width] duration-500" style={{ width: `${ch.percentage}%` }} />
+
+                                <div className="h-2.5 overflow-hidden  bg-neutral-100">
+                                    <div className="h-full  bg-brand transition-[width] duration-500" style={{ width: `${ch.percentage}%` }} />
                                 </div>
                             </li>
                         ))}

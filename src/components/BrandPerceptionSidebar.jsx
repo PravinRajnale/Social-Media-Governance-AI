@@ -1,8 +1,8 @@
 import { useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
- 
+
 // ── Inline Icons ──────────────────────────────────────────────────────────────
- 
+
 function IconChevronLeft({ className }) {
   return (
     <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -11,7 +11,7 @@ function IconChevronLeft({ className }) {
     </svg>
   )
 }
- 
+
 function IconUpload({ className }) {
   return (
     <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -22,7 +22,7 @@ function IconUpload({ className }) {
     </svg>
   )
 }
- 
+
 function IconDashboard({ className }) {
   return (
     <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -34,37 +34,37 @@ function IconDashboard({ className }) {
     </svg>
   )
 }
- 
+
 // ── Nav items ─────────────────────────────────────────────────────────────────
- 
+
 const nav = [
   {
     id: 'import',
-    label: 'Import',
+    label: 'Agentic AI',
     icon: IconUpload,
     path: '/brand-perception',           // existing upload/analysis page
   },
-  {
-    id: 'dashboard',
-    label: 'Dashboard',
-    icon: IconDashboard,
-    path: '/brand-perception/dashboard', // GovernanceDashboard
-  },
+  // {
+  //   id: 'dashboard',
+  //   label: 'Dashboard',
+  //   icon: IconDashboard,
+  //   path: '/brand-perception/dashboard', // GovernanceDashboard
+  // },
 ]
- 
+
 // ── Sidebar ───────────────────────────────────────────────────────────────────
- 
+
 function BrandPerceptionSidebar() {
   const [collapsed, setCollapsed] = useState(false)
   const location = useLocation()
- 
+
   // Determine active item — dashboard wins if path includes /dashboard
   const activeId = location.pathname.includes('/brand-perception/dashboard')
     ? 'dashboard'
     : location.pathname === '/brand-perception'
       ? 'import'
       : 'dashboard'   // default fallback
- 
+
   return (
     <aside
       style={{ minHeight: '100%' }}
@@ -87,13 +87,13 @@ function BrandPerceptionSidebar() {
           />
         </button>
       </div>
- 
+
       {/* Navigation */}
       <nav className="flex flex-1 flex-col gap-0 p-0">
         {nav.map((item) => {
           const Icon = item.icon
           const active = item.id === activeId
- 
+
           return (
             <Link
               key={item.id}
@@ -117,6 +117,5 @@ function BrandPerceptionSidebar() {
     </aside>
   )
 }
- 
+
 export default BrandPerceptionSidebar
- 

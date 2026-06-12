@@ -5,22 +5,23 @@
             "Fake product complaints",
             "Fraudulent Facebook page deletion warnings",
             "Impersonation of Meta team",
-            "Customer dissatisfaction with product quality"
+            "Customer dissatisfaction with product quality",
+            "Fraudulent Customer Support Contacts"
         ],
         "key_insights":[
             "Customer feedback reveals significant concerns about fraudulent activities, such as fake product deliveries and impersonation attempts. These issues directly impact brand perception by eroding trust and creating a sense of unreliability around the brand. For instance, a customer reported receiving a fake bulb instead of the original product, which can lead to negative word-of-mouth and reduced customer loyalty.",
             "The brand faces risks from impersonation attempts, such as fake Meta team messages and fraudulent Facebook page deletion warnings. These scams can confuse customers and damage the brand's reputation if not addressed promptly. However, the brand's proactive engagement with customers and efforts to resolve issues, such as product replacements, can strengthen its perception as a customer-focused and responsive organization."
         ],
         "count": 40,
-        "percentage": 1.8256503879507076
+        "percentage": 1.825
     },
     {
         "lens": "Response Accountability",
         "top_themes": [
             "Order Delivery Issues",
             "Customer Service Responsiveness",
-            "Privacy and Security Concerns",
-            "Career Opportunities"
+            "Privacy and Security Concerns"
+            
         ],
         "key_insights": [
             "Customer feedback highlights recurring concerns about delayed order deliveries and the need for prompt resolutions. The brand's acknowledgment of these issues and its efforts to address them demonstrate accountability, which positively impacts brand perception by showing a commitment to customer satisfaction. However, repeated delays and the need for escalation may erode trust if not resolved efficiently.",
@@ -32,7 +33,7 @@
     {
         "lens": "Customer Escalation Signals",
         "top_themes": [
-            "Poor after-sales service and unresponsive customer support",
+            "unresponsive customer support",
             "Product quality issues and durability concerns",
             "Warranty claims and unresolved complaints",
             "Delivery and return process inefficiencies"
@@ -64,7 +65,6 @@
         "top_themes": [
             "Product Quality Issues",
             "Durability and Longevity",
-            "Customer Service and Support",
             "Misleading Product Descriptions"
         ],
         "key_insights": [

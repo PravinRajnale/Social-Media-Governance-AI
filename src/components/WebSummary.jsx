@@ -4,6 +4,7 @@ import {
  BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
  PieChart, Pie, Cell, AreaChart, Area,
 } from "recharts";
+import { INCIDENTS_INITIAL } from "./WebIncidents";
 
 
 const C = {
@@ -22,48 +23,123 @@ const C = {
  gray800: "#63666A",
 };
 
+// ─── Helper function to group incidents by platform category ─────────────────
+function getPlatformCategory(platform) {
+  const bloggingPlatforms = ["Quora", "Reddit"];
+  const jobPlatforms = ["Kit Job", "Bebee"];
+  const appPlatforms = ["App Store"];
+  const suspiciousPlatforms = ["Web Page", "Domain", "Website"];
+  
+  if (bloggingPlatforms.some(p => platform?.includes(p))) return "Blogging Websites";
+  if (jobPlatforms.some(p => platform?.includes(p))) return "Job Websites";
+  if (appPlatforms.some(p => platform?.includes(p))) return "Apps/Apks";
+  if (suspiciousPlatforms.some(p => platform?.includes(p))) return "Suspicious/Similar Domains";
+  return "Suspicious/Similar Domains";
+}
 
-const customerCare = [
- { cat: "Blogging Websites", incidents: 60, unique: 37 },
- { cat: "Job Websites", incidents: 58, unique: 6 },
- { cat: "Apps/Apks", incidents: 4, unique: 1 },
- { cat: "Suspicious/Similar Domains", incidents: 1, unique: 1 },
-];
+// ─── Compute data from incidents ────────────────────────────────────────────
+function computeSummaryData() {
+  const grouped = {};
+  
+  // Group incidents by platform category
+  INCIDENTS_INITIAL.forEach(incident => {
+    const category = getPlatformCategory(incident.platform);
+    if (!grouped[category]) {
+      grouped[category] = { incidents: [], closed: 0 };
+    }
+    grouped[category].incidents.push(incident);
+    if (incident.ticketStatus === "Resolved") {
+      grouped[category].closed++;
+    }
+  });
+  
+  // Build summary arrays
+  const customerCare = Object.entries(grouped).map(([cat, data]) => ({
+    cat,
+    incidents: data.incidents.length,
+    unique: data.incidents.length, // Using total count as unique for now
+  }));
+  
+  const catShare = Object.entries(grouped).map(([name, data], idx) => ({
+    name,
+    value: data.incidents.length,
+    color: [C.primary, C.primaryDark, C.primaryLight, C.primaryMid][idx % 4],
+  }));
+  
+  const webAppStatus = Object.entries(grouped).map(([cat, data], idx) => ({
+    cat,
+    reported: data.incidents.length,
+    unique: data.incidents.length,
+    closed: data.closed,
+  }));
+  
+  return {
+    customerCare,
+    catShare,
+    webAppStatus,
+    totalIncidents: INCIDENTS_INITIAL.length,
+    totalUnique: INCIDENTS_INITIAL.length,
+  };
+}
+
+const summaryData = computeSummaryData();
+const customerCare = summaryData.customerCare;
+const catShare = summaryData.catShare;
+const webAppStatus = summaryData.webAppStatus;
+const TOTAL_INCIDENTS = summaryData.totalIncidents;
+const TOTAL_UNIQUE = summaryData.totalUnique;
 
 
-const catShare = [
- { name: "Blogging Websites", value: 60, color: C.primary },
- { name: "Job Websites", value: 58, color: C.primaryDark },
- { name: "Apps/Apks", value: 4, color: C.primaryLight },
- { name: "Suspicious/Similar Domains", value: 1, color: C.primaryMid },
-];
+const jobPromotions = summaryData.catShare.filter(c => c.name === "Job Websites").map(c => ({ name: c.name, value: c.value }));
 
 
-// const catTrend = [{ date: "2026-02-27", incidents: 798, unique: 461 }];
-const catTrend = [
- { date: "Jan", incidents: 40, unique: 20 },
- { date: "Feb", incidents: 245, unique: 228 },
- { date: "Mar", incidents: 38, unique: 35 },
- { date: "Apr", incidents: 455, unique: 100 },
- { date: "May", incidents: 48, unique: 42 },
- { date: "Jun", incidents: 798, unique: 461 },
- { date: "Jul", incidents: 720, unique: 380 },
-];
+// ─── Generate dynamic category trend data ──────────────────────────────────────
+function generateCategoryTrendData() {
+  const trends = {};
+  const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun"];
+  // Month multipliers to create variation in trend (progressive increase)
+  const monthMultipliers = [0.8, 0.9, 1.0, 1.1, 1.2, 1.3];
+  
+  // For each category from catShare, distribute total incidents across months with variation
+  catShare.forEach(({ name, value: total }) => {
+    // Calculate sum of multipliers to properly scale
+    const multiplierSum = monthMultipliers.reduce((a, b) => a + b, 0);
+    
+    // Calculate exact proportional amounts
+    const monthData = months.map((month, idx) => {
+      return {
+        date: month,
+        exactAmount: (total * monthMultipliers[idx]) / multiplierSum,
+      };
+    });
+    
+    // Distribute using floor for months 0-4, remainder goes to month 5
+    let remainingIncidents = total;
+    const distributedData = monthData.map((item, idx) => {
+      let incidents;
+      if (idx < monthData.length - 1) {
+        // Use floor for all months except the last
+        incidents = Math.floor(item.exactAmount);
+      } else {
+        // Last month gets the remainder to ensure exact total
+        incidents = remainingIncidents;
+      }
+      remainingIncidents -= incidents;
+      
+      return {
+        date: item.date,
+        incidents: incidents,
+        unique: Math.floor(incidents * 0.7),
+      };
+    });
+    
+    trends[name] = distributedData;
+  });
+  
+  return trends;
+}
 
-
-const webAppStatus = [
- { cat: "Blogging Websites", reported: 60, unique: 37, closed: 0 },
- { cat: "Job Websites", reported: 58, unique: 6, closed: 0 },
- { cat: "Apps/Apks", reported: 4, unique: 1, closed: 0 },
- { cat: "Suspicious/Similar Domains", reported: 1, unique: 1, closed: 0 },
-];
-
-
-const jobPromotions = [{ name: "Job Websites", value: 58 }];
-
-
-const TOTAL_INCIDENTS = customerCare.reduce((s, d) => s + d.incidents, 0);
-const TOTAL_UNIQUE = customerCare.reduce((s, d) => s + d.unique, 0);
+const categoryTrendData = generateCategoryTrendData();
 
 
 // ─── Custom Tooltip ───────────────────────────────────────────────────────────
@@ -78,6 +154,57 @@ const ChartTip = ({ active, payload }) => {
      <p style={{ color: C.gray600, margin: "2px 0" }}>Unique: <strong>{d.unique}</strong></p>
    </div>
  );
+};
+
+const WebAppStatusTip = ({ active, payload, label }) => {
+  if (!active || !payload?.length) return null;
+
+  return (
+    <div
+      style={{
+        background: "#fff",
+        border: "1px solid #e5e7eb",
+        borderRadius: 8,
+        padding: "10px 14px",
+        boxShadow: "0 2px 8px rgba(0,0,0,0.08)",
+        fontSize: 13, // default font size
+      }}
+    >
+      <p
+        style={{
+          fontWeight: 500,
+          fontSize: 14,
+          color: "#000",
+          marginBottom: 6,
+        }}
+      >
+        {label}
+      </p>
+
+      {payload.map((item) => (
+        <p
+          key={item.dataKey}
+          style={{
+            margin: "4px 0",
+            color: item.color, // uses bar color
+            fontSize: 12,      // value font size
+            fontWeight: 500,
+          }}
+        >
+          {item.name}:{" "}
+          <strong
+            style={{
+              fontSize: 13,
+              color: "#111827",
+              fontWeight: 700,
+            }}
+          >
+            {item.value}
+          </strong>
+        </p>
+      ))}
+    </div>
+  );
 };
 
 
@@ -105,10 +232,10 @@ function CustomerCareDumbbellChart() {
  const DumbbellShape = (props) => {
    const { x, y, width, height, incidents, unique } = props;
    if (!width || !height) return null;
-   const leftpad = 18;
+   const Left_padding = 18;
    const scale = width / incidents;
-   const x1 = x + leftpad + unique * scale;
-   const x2 = x + leftpad + width;
+   const x1 = x +Left_padding+ unique * scale;
+   const x2 = x +Left_padding+ width;
    const cy = y + height / 2;
    return (
      <g>
@@ -173,10 +300,10 @@ function CustomerCareDumbbellChart() {
 
 
 // ─── Area Chart Component ─────────────────────────────────────────────────────
-function CategoriesTrendChart({ height = 260 }) {
+function CategoriesTrendChart({ height = 260, data }) {
  return (
    <ResponsiveContainer width="100%" height={height}>
-     <AreaChart data={catTrend} margin={{ top: 10, right: 10, bottom: 0, left: 0 }}>
+     <AreaChart data={data} margin={{ top: 10, right: 10, bottom: 0, left: 0 }}>
        <defs>
          <linearGradient id="gradIncidents" x1="0" y1="0" x2="0" y2="1">
            <stop offset="0%" stopColor={C.primaryDark} stopOpacity={0.5} />
@@ -414,12 +541,14 @@ function DonutLabel({ cx, cy, midAngle, innerRadius, outerRadius, percent }) {
 // ─── Main Page ────────────────────────────────────────────────────────────────
 export default function WebSummary() {
  const [expanded, setExpanded] = useState(null);
+ const [selectedCategory, setSelectedCategory] = useState("Blogging Websites");
 
 
  const webAppStatusRef = useRef(null);
  const jobPromotionsRef = useRef(null);
  const categoryShareRef = useRef(null);
  const categoryTrendRef = useRef(null);
+ const takedownPieRef = useRef(null);
  const customerCareRef = useRef(null);
  const offersRef = useRef(null);
 
@@ -428,7 +557,7 @@ export default function WebSummary() {
    webAppStatus: webAppStatus,
    jobPromotions: jobPromotions,
    categoryShare: catShare.map(({ name, value }) => ({ name, value })),
-   categoryTrend: catTrend,
+   categoryTrend: categoryTrendData[selectedCategory],
    customerCare: customerCare,
    offers: [],
  };
@@ -457,16 +586,29 @@ export default function WebSummary() {
 
 
      {/* ── Status Cards ── */}
-     <section className="mb-3 grid gap-3 grid-cols-5">
-       <Link to="/web-incidents" className="block transition hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-brand/50">
-         <StatusCard iconSrc={`${import.meta.env.BASE_URL}status-icons/Incidents.png`} value={123} label="Incidents Reported" />
+     <section className="mb-3 grid gap-3 grid-cols-3">
+       <Link to="/web-incidents" className="block transition hover:shadow-lg focus:outline-none">
+         <StatusCard iconSrc="/status-icons/Incidents.png" value={INCIDENTS_INITIAL.length} label="Incidents Reported" />
        </Link>
-       <StatusCard iconSrc={`${import.meta.env.BASE_URL}status-icons/underReview.png`} value={123} label="Under Brand Review" />
-       <StatusCard iconSrc={`${import.meta.env.BASE_URL}status-icons/takedown.png`} value={0} label="Takedown Initiated" />
-       <div className="col-span-2">
-         <StatusCard value={0} label="Closed Incidents">
+      <Link to="/web-incidents" className="block transition hover:shadow-lg focus:outline-none">
+        <StatusCard iconSrc="/status-icons/underReview.png" value={INCIDENTS_INITIAL.length} label="Under Brand Review" />
+      </Link>
+      <Link to="/web-incidents" className="block transition hover:shadow-lg focus:outline-none">
+       <StatusCard iconSrc="/status-icons/takedown.png" value={INCIDENTS_INITIAL.filter(i => i.ticketStatus === "Resolved").length} label="Closed Incidents" />
+      </Link>
+       {/* <div className="col-span-2">
+         <StatusCard label="Takedown Status">
            <div className="grid grid-cols-3 gap-0.5 border-t border-neutral-200 pt-2 text-center">
-             {[["0", "Taken down"], ["0", "No action"], ["0", "Recommended to legal"]].map(([v, l]) => (
+             {(() => {
+               const takenDown = INCIDENTS_INITIAL.filter(i => i.takedownStatus === "Taken Down").length;
+               const noAction = INCIDENTS_INITIAL.filter(i => i.takedownStatus === "No Action").length;
+               const recommendedToLegal = INCIDENTS_INITIAL.filter(i => i.takedownStatus === "Recommended to Legal").length;
+               return [
+                 [takenDown, "Taken down"],
+                 [noAction, "No action"],
+                 [recommendedToLegal, "Recommended to legal"]
+               ];
+             })().map(([v, l]) => (
                <div key={l} className="min-w-0 px-0.5">
                  <p className="text-lg font-semibold tabular-nums text-neutral-900">{v}</p>
                  <p className="mt-0.5 text-xs font-medium leading-tight text-neutral-500">{l}</p>
@@ -474,11 +616,11 @@ export default function WebSummary() {
              ))}
            </div>
          </StatusCard>
-       </div>
+       </div> */}
      </section>
 
 
-     {/* ── Row 1: Web/App Status + Job Promotions ── */}
+     {/* ── Row 1: Web/App Status + Takedown Status Pie ── */}
      <div style={{ display: "grid", gridTemplateColumns: "2fr 1fr", gap: 14, marginBottom: 14 }}>
        <Card cardRef={webAppStatusRef}>
          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 14 }}>
@@ -490,47 +632,76 @@ export default function WebSummary() {
              <CartesianGrid strokeDasharray="3 3" stroke={C.gray100} vertical={false} />
              <XAxis dataKey="cat" tick={{ fontSize: 11, fill: C.gray400 }} axisLine={false} tickLine={false} tickMargin={16} interval={0} height={60} />
              <YAxis tick={{ fontSize: 11, fill: C.gray400 }} axisLine={false} tickLine={false} width={25} />
-             <Tooltip content={<ChartTip />} />
+             <Tooltip content={<WebAppStatusTip />} />
              <Bar dataKey="reported" fill={C.primaryDark} name="Reported Volume" barSize={26} />
              <Bar dataKey="unique" fill={C.primary} name="Unique" barSize={26} />
-             <Bar dataKey="closed" fill={C.primaryLight} name="Closed" barSize={26} />
+             <Bar dataKey="closed" fill={C.primaryMid} name="Closed" barSize={26} />
            </BarChart>
          </ResponsiveContainer>
          <Legend2 items={[{ c: C.primaryDark, l: "Reported Volume" }, { c: C.primary, l: "Unique" }, { c: C.primaryLight, l: "Closed" }]} />
        </Card>
 
-
-       <Card cardRef={jobPromotionsRef} className="flex flex-col items-center">
-         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%", marginBottom: 4 }}>
-           <SectionHeader title="Job Promotions" />
-           <ChartMenu title="Job Promotions" csvData={csvMap.jobPromotions} chartRef={jobPromotionsRef} onExpand={() => setExpanded("jobPromotions")} />
+       <Card cardRef={takedownPieRef}>
+         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 14 }}>
+           <SectionHeader title="Takedown Status" />
+           <ChartMenu title="Takedown Status" csvData={(() => {
+             const takenDown = INCIDENTS_INITIAL.filter(i => i.takedownStatus === "Taken Down").length;
+             const noAction = INCIDENTS_INITIAL.filter(i => i.takedownStatus === "No Action").length;
+             const recommendedToLegal = INCIDENTS_INITIAL.filter(i => i.takedownStatus === "Recommended to Legal").length;
+             return [
+               { status: "Taken Down", value: takenDown },
+               { status: "No Action", value: noAction },
+               { status: "Recommended to Legal", value: recommendedToLegal }
+             ];
+           })()} chartRef={takedownPieRef} onExpand={() => setExpanded("takedownStatusPie")} />
          </div>
-         <div style={{ width: "100%", height: 220 }}>
+         <div style={{ width: "100%", height: 260 }}>
            <ResponsiveContainer width="100%" height="100%">
              <PieChart>
-               <Pie data={[{ value: 58 }]} cx="50%" cy="50%" innerRadius={62} outerRadius={92} startAngle={90} endAngle={-270} dataKey="value">
-                 <Cell fill={C.primaryDark} />
-               </Pie>
-               <text x="50%" y="46%" textAnchor="middle" dominantBaseline="central" fontSize={32} fontWeight={800} fill={C.black}>58</text>
-               <text x="50%" y="58%" textAnchor="middle" dominantBaseline="central" fontSize={12} fill={C.gray400}>Total Count</text>
+               {(() => {
+                 const takenDown = INCIDENTS_INITIAL.filter(i => i.takedownStatus === "Taken Down").length;
+                 const noAction = INCIDENTS_INITIAL.filter(i => i.takedownStatus === "No Action").length;
+                 const recommendedToLegal = INCIDENTS_INITIAL.filter(i => i.takedownStatus === "Recommended to Legal").length;
+                 const pieData = [
+                   { name: "Taken Down", value: takenDown, color: C.primaryDark },
+                   { name: "No Action", value: noAction, color: C.primaryMid },
+                   { name: "Recommended to Legal", value: recommendedToLegal, color: C.primary }
+                 ];
+                 return (
+                   <>
+                     <Pie data={pieData} cx="50%" cy="50%" innerRadius={58} outerRadius={88} dataKey="value" labelLine={false} label={DonutLabel}>
+                       {pieData.map((e, i) => <Cell key={i} fill={e.color} />)}
+                     </Pie>
+                     <text x="50%" y="47%" textAnchor="middle" dominantBaseline="central" fontSize={22} fontWeight={800} fill={C.black}>{INCIDENTS_INITIAL.length}</text>
+                     <text x="50%" y="57%" textAnchor="middle" dominantBaseline="central" fontSize={11} fill={C.gray400}>Total Count</text>
+                   </>
+                 );
+               })()}
              </PieChart>
            </ResponsiveContainer>
          </div>
-         <div style={{ display: "flex", flexDirection: "column", gap: 2, marginTop: 25, width: "100%", alignItems: "center" }}>
-           <span style={{ display: "flex", alignItems: "center", gap: 3, color: C.gray600, fontSize: 12 }}>
-             <span style={{ width: 10, height: 10, borderRadius: "50%", background: C.primaryDark, display: "inline-block" }} />
-             Job Websites: <strong style={{ color: C.black }}>58</strong>
-           </span>
+         <div style={{ display: "flex", flexDirection: "column", gap: 6, marginTop: 12 }}>
+           {(() => {
+             const takenDown = INCIDENTS_INITIAL.filter(i => i.takedownStatus === "Taken Down").length;
+             const noAction = INCIDENTS_INITIAL.filter(i => i.takedownStatus === "No Action").length;
+             const recommendedToLegal = INCIDENTS_INITIAL.filter(i => i.takedownStatus === "Recommended to Legal").length;
+             return [
+               { value: takenDown, label: "Taken Down", color: C.primary },
+               { value: noAction, label: "No Action", color: C.primaryLight },
+               { value: recommendedToLegal, label: "Recommended to Legal", color: C.primaryMid }
+             ];
+           })().map(({ value, label, color }) => (
+             <span key={label} style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 11, color: C.gray600 }}>
+               <span style={{ width: 10, height: 10, borderRadius: "50%", background: color, flexShrink: 0 }} />
+               {label}: <strong style={{ color: C.black }}>{value}</strong>
+             </span>
+           ))}
          </div>
        </Card>
      </div>
 
-
-     {/* ── Row 2: Category Share + Categories Trend ── */}
+     {/* ── Row 2: Category Share + Incidents Trend ── */}
      <div style={{ display: "grid", gridTemplateColumns: "1fr 2fr", gap: 14, marginBottom: 14 }}>
-
-
-       {/* Category Share */}
        <Card cardRef={categoryShareRef}>
          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 14 }}>
            <SectionHeader title="Category Share" />
@@ -540,9 +711,9 @@ export default function WebSummary() {
            <ResponsiveContainer width="100%" height="100%">
              <PieChart>
                <Pie data={catShare} cx="50%" cy="50%" innerRadius={58} outerRadius={88} dataKey="value" labelLine={false} label={DonutLabel}>
-                 {catShare.map((e, i) => <Cell key={i} fill={e.color} />)}
+                 {catShare.map((e, i) => <Cell key={i} fill={e.color} style={{ cursor: "pointer" }} onClick={() => setSelectedCategory(e.name)} />)}
                </Pie>
-               <text x="50%" y="47%" textAnchor="middle" dominantBaseline="central" fontSize={22} fontWeight={800} fill={C.black}>123</text>
+               <text x="50%" y="47%" textAnchor="middle" dominantBaseline="central" fontSize={22} fontWeight={800} fill={C.black}>{TOTAL_INCIDENTS}</text>
                <text x="50%" y="57%" textAnchor="middle" dominantBaseline="central" fontSize={11} fill={C.gray400}>Total Count</text>
              </PieChart>
            </ResponsiveContainer>
@@ -557,48 +728,18 @@ export default function WebSummary() {
          </div>
        </Card>
 
-
-       {/* Categories Trend — ✅ ONLY ONE card, using AreaChart */}
        <Card cardRef={categoryTrendRef}>
          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 14 }}>
-           <span style={{ fontSize: 14, fontWeight: 700, color: C.black }}>Categories Trend</span>
+           <span style={{ fontSize: 14, fontWeight: 700, color: C.black }}>Incidents Trend ({selectedCategory})</span>
            <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-             <select style={{ fontSize: 11, border: `1px solid ${C.gray200}`, borderRadius: 6, padding: "3px 8px", color: C.gray600, background: C.white, cursor: "pointer" }}>
-               <option>Daily</option>
-               <option>Weekly</option>
-               <option>Monthly</option>
-             </select>
              <ChartMenu title="Categories Trend" csvData={csvMap.categoryTrend} chartRef={categoryTrendRef} onExpand={() => setExpanded("categoryTrend")} />
            </div>
          </div>
-         <CategoriesTrendChart height={260} />
+         <CategoriesTrendChart height={260} data={categoryTrendData[selectedCategory]} />
          <Legend2 items={[{ c: C.primaryDark, op: 0.9, l: "Incidents" }, { c: C.primary, l: "Unique" }]} />
        </Card>
      </div>
-
-
-     {/* ── Row 3: Customer Care + Offers ── */}
-     <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14, marginBottom: 14 }}>
-       <Card cardRef={customerCareRef}>
-         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 8 }}>
-           <SectionHeader title="Customer Care Number" />
-           <ChartMenu title="Customer Care Number" csvData={csvMap.customerCare} chartRef={customerCareRef} onExpand={() => setExpanded("customerCare")} />
-         </div>
-         <CustomerCareDumbbellChart />
-       </Card>
-
-
-       <Card cardRef={offersRef} className="flex flex-col">
-         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 4 }}>
-           <SectionHeader title="Offers" />
-           <ChartMenu title="Offers" csvData={csvMap.offers} chartRef={offersRef} onExpand={() => setExpanded("offers")} />
-         </div>
-         <div style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", minHeight: 180 }}>
-           <p style={{ fontSize: 13, color: C.gray400, fontStyle: "italic" }}>No Data Found !</p>
-         </div>
-       </Card>
-     </div>
-
+ 
 
      {/* ── Expand Modals ── */}
      {expanded === "webAppStatus" && (
@@ -656,7 +797,7 @@ export default function WebSummary() {
                <Pie data={catShare} cx="50%" cy="50%" innerRadius={80} outerRadius={130} dataKey="value" labelLine={false} label={DonutLabel}>
                  {catShare.map((e, i) => <Cell key={i} fill={e.color} />)}
                </Pie>
-               <text x="50%" y="47%" textAnchor="middle" dominantBaseline="central" fontSize={32} fontWeight={800} fill={C.black}>123</text>
+               <text x="50%" y="47%" textAnchor="middle" dominantBaseline="central" fontSize={32} fontWeight={800} fill={C.black}>{TOTAL_INCIDENTS}</text>
                <text x="50%" y="57%" textAnchor="middle" dominantBaseline="central" fontSize={13} fill={C.gray400}>Total Count</text>
              </PieChart>
            </ResponsiveContainer>
@@ -682,6 +823,53 @@ export default function WebSummary() {
                <span style={{ width: 12, height: 12, borderRadius: "50%", background: c, display: "inline-block" }} /> {l}
              </span>
            ))}
+         </div>
+       </ExpandModal>
+     )}
+
+     {expanded === "takedownStatusPie" && (
+       <ExpandModal title="Takedown Status" onClose={() => setExpanded(null)}>
+         <div style={{ display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "center", gap: 48, paddingTop: 24, paddingBottom: 24 }}>
+           <ResponsiveContainer width={300} height={300}>
+             <PieChart>
+               {(() => {
+                 const takenDown = INCIDENTS_INITIAL.filter(i => i.takedownStatus === "Taken Down").length;
+                 const noAction = INCIDENTS_INITIAL.filter(i => i.takedownStatus === "No Action").length;
+                 const recommendedToLegal = INCIDENTS_INITIAL.filter(i => i.takedownStatus === "Recommended to Legal").length;
+                 const pieData = [
+                   { name: "Taken Down", value: takenDown, color: C.primary },
+                   { name: "No Action", value: noAction, color: C.primaryLight },
+                   { name: "Recommended to Legal", value: recommendedToLegal, color: C.primaryMid }
+                 ];
+                 return (
+                   <>
+                     <Pie data={pieData} cx="50%" cy="50%" innerRadius={80} outerRadius={130} dataKey="value" labelLine={false} label={DonutLabel}>
+                       {pieData.map((e, i) => <Cell key={i} fill={e.color} />)}
+                     </Pie>
+                     <text x="50%" y="47%" textAnchor="middle" dominantBaseline="central" fontSize={32} fontWeight={800} fill={C.black}>{INCIDENTS_INITIAL.length}</text>
+                     <text x="50%" y="57%" textAnchor="middle" dominantBaseline="central" fontSize={13} fill={C.gray400}>Total Count</text>
+                   </>
+                 );
+               })()}
+             </PieChart>
+           </ResponsiveContainer>
+           <ul style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+             {(() => {
+               const takenDown = INCIDENTS_INITIAL.filter(i => i.takedownStatus === "Taken Down").length;
+               const noAction = INCIDENTS_INITIAL.filter(i => i.takedownStatus === "No Action").length;
+               const recommendedToLegal = INCIDENTS_INITIAL.filter(i => i.takedownStatus === "Recommended to Legal").length;
+               return [
+                 { value: takenDown, label: "Taken Down", color: C.primary },
+                 { value: noAction, label: "No Action", color: C.primaryLight },
+                 { value: recommendedToLegal, label: "Recommended to Legal", color: C.primaryMid }
+               ];
+             })().map(({ value, label, color }) => (
+               <li key={label} style={{ display: "flex", alignItems: "center", gap: 10, fontSize: 13, color: C.gray600 }}>
+                 <span style={{ width: 12, height: 12, borderRadius: "50%", background: color, flexShrink: 0 }} />
+                 <span>{label}: <strong style={{ color: C.black }}>{value}</strong></span>
+               </li>
+             ))}
+           </ul>
          </div>
        </ExpandModal>
      )}

@@ -44,7 +44,7 @@ function ProgressNav({ step, bridgeLabels = [] }) {
               >
                 <span
                   style={{
-                    fontSize: 14,
+                    fontSize: 10,
                     fontWeight: 500,
                     letterSpacing: "0.05em",
                     textTransform: "uppercase",

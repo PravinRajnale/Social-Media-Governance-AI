@@ -1,7 +1,7 @@
 import { useState } from "react";
- 
+
 const ACCENT_COLORS = ["#ef4444", "#6366f1", "#10b981", "#f59e0b", "#8b5cf6"];
- 
+
 const COUNT_BADGE_STYLES = [
     { bg: "#fef2f2", color: "#b91c1c", border: "#fca5a5" },
     { bg: "#f0f0ff", color: "#4f46e5", border: "#c7d2fe" },
@@ -9,7 +9,7 @@ const COUNT_BADGE_STYLES = [
     { bg: "#fffbeb", color: "#b45309", border: "#fcd34d" },
     { bg: "#f5f3ff", color: "#6d28d9", border: "#c4b5fd" },
 ];
- 
+
 const THEME_PCTS = {
     "Suspicious Claims & Information": [30, 20, 15, 20, 15],
     "Response Accountability": [32, 28, 22, 18],
@@ -23,7 +23,7 @@ const THEME_PCTS = {
     "Moderation Governance": [34, 28, 22, 16],
     "Misinformation & Clarification": [40, 28, 20, 12],
 };
- 
+
 const LENS_DEFINITIONS = {
     "Suspicious Claims & Information":
         "Measures the presence of potentially misleading, exaggerated, or unverified information about the brand circulating on social media.",
@@ -48,7 +48,7 @@ const LENS_DEFINITIONS = {
     "Brand Promise Consistency":
         "Assesses whether customer comments indicate a gap between brand claims in posts and the actual experience shared by users.",
 };
- 
+
 const LENS_TO_FILE = {
     "Suspicious Claims & Information": "Suspicious-Claims-Information.xlsx",
     "Response Accountability": "Response-Accountability.xlsx",
@@ -62,7 +62,7 @@ const LENS_TO_FILE = {
     "Moderation Governance": "Moderation-Governance.xlsx",
     "Misinformation & Clarification": "Misinformation-Clarification.xlsx",
 };
- 
+
 const DEFAULT_DATA = [
     {
         lens: "Suspicious Claims & Information",
@@ -241,7 +241,7 @@ const DEFAULT_DATA = [
         ],
     },
 ];
- 
+
 // ── Overview Cards Data (icon + count + label) ────────────────────────────────
 const DEFAULT_OVERVIEW_CARDS = [
     { label: "Total number of mentions", count: 19671, icon: "mentions" },
@@ -249,16 +249,16 @@ const DEFAULT_OVERVIEW_CARDS = [
     { label: "Number of negative mentions", count: 3464, icon: "negative" },
     { label: "Number of neutral mentions", count: 8589, icon: "neutral" },
 ];
- 
+
 // ── Source Breakdown Cards Data (progress bar style) ──────────────────────────
 const DEFAULT_SUMMARY_CARDS = [
-    { label: "Amazon", count: 9245, percentage: 47, color: "#3b82f6" },
-    { label: "Flipkart", count: 7475, percentage: 38, color: "#8b5cf6" },
-    { label: "Facebook", count: 1770, percentage: 9, color: "#10b981" },
-    { label: "Instagram", count: 787, percentage: 4, color: "#f59e0b" },
-    { label: "Others", count: 394, percentage: 2, color: "#6b7280" },
+    { label: "Amazon", count: 1048, percentage: 47, color: "#3b82f6" },
+    { label: "Flipkart", count: 848, percentage: 38, color: "#8b5cf6" },
+    { label: "Facebook", count: 201, percentage: 9, color: "#10b981" },
+    { label: "Instagram", count: 89, percentage: 4, color: "#f59e0b" },
+    { label: "Others", count: 45, percentage: 2, color: "#ef4444" },
 ];
- 
+
 // ── Icons (all black) ─────────────────────────────────────────────────────────
 function IconMentions() {
     return (
@@ -276,7 +276,7 @@ function IconMentions() {
         </svg>
     );
 }
- 
+
 function IconPositive() {
     return (
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
@@ -293,7 +293,7 @@ function IconPositive() {
         </svg>
     );
 }
- 
+
 function IconNegative() {
     return (
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
@@ -310,7 +310,7 @@ function IconNegative() {
         </svg>
     );
 }
- 
+
 function IconNeutral() {
     return (
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
@@ -329,18 +329,18 @@ function IconNeutral() {
         </svg>
     );
 }
- 
+
 const ICON_MAP = {
     mentions: IconMentions,
     positive: IconPositive,
     negative: IconNegative,
     neutral: IconNeutral,
 };
- 
+
 // ── Summary Card ──────────────────────────────────────────────────────────────
 function SummaryCard({ label, count, icon }) {
     const IconComponent = ICON_MAP[icon];
- 
+
     return (
         <div
             style={{
@@ -377,7 +377,7 @@ function SummaryCard({ label, count, icon }) {
             >
                 {IconComponent && <IconComponent />}
             </div>
- 
+
             {/* Count */}
             <span
                 style={{
@@ -390,7 +390,7 @@ function SummaryCard({ label, count, icon }) {
             >
                 {count.toLocaleString()}
             </span>
- 
+
             {/* Label */}
             <span
                 style={{
@@ -406,7 +406,7 @@ function SummaryCard({ label, count, icon }) {
         </div>
     );
 }
- 
+
 // ── Source Breakdown Card (progress bar style) ────────────────────────────────
 function SourceCard({ label, count, percentage, color }) {
     return (
@@ -450,12 +450,12 @@ function SourceCard({ label, count, percentage, color }) {
         </div>
     );
 }
- 
+
 function PctRing({ pct, color }) {
     const r = 22;
     const circ = 2 * Math.PI * r;
     const offset = circ - (pct / 100) * circ;
- 
+
     return (
         <div style={{ position: "relative", width: 56, height: 56 }}>
             <svg
@@ -501,7 +501,7 @@ function PctRing({ pct, color }) {
         </div>
     );
 }
- 
+
 function Divider() {
     return (
         <div
@@ -514,7 +514,7 @@ function Divider() {
         />
     );
 }
- 
+
 function LensCard({ item, index }) {
     const accent = ACCENT_COLORS[index % ACCENT_COLORS.length];
     const badge = COUNT_BADGE_STYLES[index % COUNT_BADGE_STYLES.length];
@@ -523,7 +523,7 @@ function LensCard({ item, index }) {
     const definition =
         LENS_DEFINITIONS[item.lens] ??
         `Analyzes responses through the "${item.lens}" perspective to surface patterns and insights.`;
- 
+
     const downloadExcel = () => {
         const fileName = LENS_TO_FILE[item.lens?.trim()];
         if (!fileName) return;
@@ -534,7 +534,7 @@ function LensCard({ item, index }) {
         link.click();
         document.body.removeChild(link);
     };
- 
+
     return (
         <div
             style={{
@@ -561,7 +561,7 @@ function LensCard({ item, index }) {
                     borderRadius: "3px 0 0 3px",
                 }}
             />
- 
+
             {/* Lens Name + Tooltip */}
             <div
                 style={{
@@ -650,7 +650,7 @@ function LensCard({ item, index }) {
                     </div>
                 )}
             </div>
- 
+
             {/* Arrow */}
             <div style={{ padding: "0 8px", flexShrink: 0 }}>
                 <svg
@@ -669,9 +669,9 @@ function LensCard({ item, index }) {
                     />
                 </svg>
             </div>
- 
+
             <Divider />
- 
+
             {/* Count */}
             <div
                 style={{
@@ -697,9 +697,9 @@ function LensCard({ item, index }) {
                     {item.count}
                 </span>
             </div>
- 
+
             <Divider />
- 
+
             {/* Top Themes */}
             <div
                 style={{
@@ -761,9 +761,9 @@ function LensCard({ item, index }) {
                     </div>
                 ))}
             </div>
- 
+
             <Divider />
- 
+
             {/* Key Insights */}
             <div
                 style={{ flex: 1, display: "flex", flexDirection: "column", gap: 8 }}
@@ -794,9 +794,9 @@ function LensCard({ item, index }) {
                     </div>
                 ))}
             </div>
- 
+
             <Divider />
- 
+
             {/* Ring */}
             <div style={{ minWidth: 80, display: "flex", justifyContent: "center" }}>
                 <PctRing pct={item.percentage} color={accent} />
@@ -804,9 +804,11 @@ function LensCard({ item, index }) {
         </div>
     );
 }
- 
+
 // ── Main Dashboard Component ──────────────────────────────────────────────────
- 
+
+export { DEFAULT_OVERVIEW_CARDS, DEFAULT_SUMMARY_CARDS, SummaryCard, SourceCard };
+
 export default function GovernanceDashboard({
     result = DEFAULT_DATA,
     overviewCards = DEFAULT_OVERVIEW_CARDS,
@@ -820,7 +822,7 @@ export default function GovernanceDashboard({
                 background: "#f9fafb",
             }}
         >
- 
+
             <div
                 style={{
                     marginBottom: 16,
@@ -842,8 +844,8 @@ export default function GovernanceDashboard({
                     Data reflects social media mentions collected across all monitored platforms from October 2025 to December 2025 for analysis of customer sentiment, engagement and brand perception.
                 </span>
             </div>
- 
- 
+
+
             {/* ── Source Breakdown Cards Section (progress bar style) ── */}
             <div style={{ marginBottom: 28 }}>
                 <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 14 }}>
@@ -861,9 +863,9 @@ export default function GovernanceDashboard({
                     ))}
                 </div>
             </div>
- 
- 
- 
+
+
+
             {/* ── Overview Cards Section (icon + count + label) ── */}
             <div style={{ marginBottom: 28 }}>
                 <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 14 }}>
@@ -878,7 +880,7 @@ export default function GovernanceDashboard({
                     ))}
                 </div>
             </div>
- 
+
             {/* ── Dashboard Section ── */}
             <div
                 style={{
@@ -895,7 +897,7 @@ export default function GovernanceDashboard({
                     </h2>
                 </div>
             </div>
- 
+
             {/* Column Headers */}
             <div
                 style={{
@@ -930,7 +932,7 @@ export default function GovernanceDashboard({
                     </div>
                 ))}
             </div>
- 
+
             {/* Cards */}
             {result.map((item, i) => (
                 <LensCard key={i} item={item} index={i} />
@@ -938,3 +940,4 @@ export default function GovernanceDashboard({
         </div>
     );
 }
+
