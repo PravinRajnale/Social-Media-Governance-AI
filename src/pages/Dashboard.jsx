@@ -45,18 +45,20 @@ const LENS_DEFINITIONS = {
   "Community Sentiment Shift": "Observes when comment threads show collective dissatisfaction or trust loss, indicating potential reputational risk.",
   "Brand Promise Consistency": "Assesses whether customer comments indicate a gap between brand claims in posts and the actual experience shared by users.",
 };
+
+
 const LENS_TO_FILE = {
-  "Suspicious Claims & Information": "/excels/Suspicious Claims & Information.xlsx",
-  "Response Accountability": "/excels/Response Accountability.xlsx",
-  "Customer Escalation Signals": "/excels/Customer Escalation Signals.xlsx",
-  "Resolution Orientation": "/excels/Resolution Orientation.xlsx",
-  "Brand Promise Consistency": "/excels/Brand Promise Consistency.xlsx",
-  "Fraud & Impersonation Signals": "/excels/Fraud & Impersonation Signals.xlsx",
-  "Tone & Professionalism": "/excels/Tone & Professionalism.xlsx",
-  "Transparency & Disclosure": "/excels/Transparency & Disclosure.xlsx",
-  "Community Sentiment Shift": "/excels/Community Sentiment Shift.xlsx",
-  "Moderation Governance": "/excels/Moderation Governance.xlsx",
-  "Misinformation & Clarification": "/excels/Misinformation & Clarification.xlsx",
+  "Suspicious Claims & Information": `${import.meta.env.BASE_URL}Excels/Suspicious Claims & Information.xlsx`,
+  "Response Accountability": `${import.meta.env.BASE_URL}Excels/Response Accountability.xlsx`,
+  "Customer Escalation Signals": `${import.meta.env.BASE_URL}Excels/Customer Escalation Signals.xlsx`,
+  "Resolution Orientation": `${import.meta.env.BASE_URL}Excels/Resolution Orientation.xlsx`,
+  "Brand Promise Consistency": `${import.meta.env.BASE_URL}Excels/Brand Promise Consistency.xlsx`,
+  "Fraud & Impersonation Signals": `${import.meta.env.BASE_URL}Excels/Fraud & Impersonation Signals.xlsx`,
+  "Tone & Professionalism": `${import.meta.env.BASE_URL}Excels/Tone & Professionalism.xlsx`,
+  "Transparency & Disclosure": `${import.meta.env.BASE_URL}Excels/Transparency & Disclosure.xlsx`,
+  "Community Sentiment Shift": `${import.meta.env.BASE_URL}Excels/Community Sentiment Shift.xlsx`,
+  "Moderation Governance": `${import.meta.env.BASE_URL}Excels/Moderation Governance.xlsx`,
+  "Misinformation & Clarification": `${import.meta.env.BASE_URL}Excels/Misinformation & Clarification.xlsx`,
 };
 
 function PctRing({ pct, color }) {
