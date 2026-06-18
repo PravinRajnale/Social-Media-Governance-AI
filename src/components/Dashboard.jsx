@@ -8,8 +8,6 @@ import {
 import { useNavigate } from "react-router-dom";
 
 
-// ─── Dashboard data ───────────────────────────────────────────────────────────
-
 const threatCategories = [
     { category: 'Fake Social Media Handles', count: 294 },
     { category: 'Fake Customer Care No', count: 24 },
@@ -24,12 +22,12 @@ const threatCategories = [
 ]
 
 const regionalSegments = [
-    { channel: 'Social Media Platforms', count: 405, percentage: 50.75, color: '#3d5224' },
-    { channel: 'YouTube', count: 190, percentage: 23.81, color: '#86bc25' },
-    { channel: 'Messaging Channel Platforms', count: 80, percentage: 10.03, color: '#b5d97a' },
-    { channel: 'Bloggingsites', count: 60, percentage: 7.52, color: '#d4d4d4' },
-    { channel: 'Organic Search', count: 59, percentage: 7.39, color: '#6b8e23' },
-    { channel: 'Rogue Apps', count: 4, percentage: 0.5, color: '#9acd32' },
+    { channel: 'Social Media Platforms', count: 405, percentage: 50.75, color: '#004A50' },
+    { channel: 'YouTube', count: 190, percentage: 23.81, color: '#4DA7AE' },
+    { channel: 'Messaging Channel Platforms', count: 80, percentage: 10.03, color: '#006068' },
+    { channel: 'Bloggingsites', count: 60, percentage: 7.52, color: '#007680' },
+    { channel: 'Organic Search', count: 59, percentage: 7.39, color: '#B3DADD' },
+    { channel: 'Rogue Apps', count: 4, percentage: 0.5, color: '#80C1C5' },
 ]
 
 const contactPoints = [
@@ -111,8 +109,8 @@ const summaryCards = [
         pct: 15.41,
         iconSrc: '/summary-icons/websites.png',
         redirectTo: '/web-summary',
-        accent: '#639922',
-        ringBg: 'rgba(99,153,34,0.12)',
+        accent: '#D85A30',
+        ringBg: 'rgba(216,90,48,0.12)',
     },
     {
         label: 'Suspicious Social Media Handles',
@@ -129,8 +127,8 @@ const summaryCards = [
         pct: 3.01,
         iconSrc: '/summary-icons/customerCare.png',
         redirectTo: '/web-summary',
-        accent: '#D85A30',
-        ringBg: 'rgba(216,90,48,0.12)',
+        accent: '#cf7759',
+       ringBg: 'rgba(207,119,89,0.12)'
     },
     {
         label: 'Suspicious Job Promotions',
@@ -200,7 +198,7 @@ const platformVolumeData = {
   { inserted_date: "26-02-2026", total: 26, active: 13, in_progress: 8, closed: 5 },
   { inserted_date: "27-02-2026", total: 30, active: 13, in_progress: 12, closed: 5 },
 ],
- 
+
 Facebook: [
   { inserted_date: "21-02-2026", total: 18, active: 9, in_progress: 5, closed: 4 },
   { inserted_date: "22-02-2026", total: 17, active: 8, in_progress: 5, closed: 4 },
@@ -210,7 +208,7 @@ Facebook: [
   { inserted_date: "26-02-2026", total: 18, active: 9, in_progress: 5, closed: 4 },
   { inserted_date: "27-02-2026", total: 18, active: 9, in_progress: 5, closed: 4 },
 ],
- 
+
 Instagram: [
   { inserted_date: "21-02-2026", total: 15, active: 8, in_progress: 4, closed: 3 },
   { inserted_date: "22-02-2026", total: 16, active: 8, in_progress: 5, closed: 3 },
@@ -220,7 +218,7 @@ Instagram: [
   { inserted_date: "26-02-2026", total: 18, active: 9, in_progress: 5, closed: 4 },
   { inserted_date: "27-02-2026", total: 15, active: 8, in_progress: 4, closed: 3 },
 ],
- 
+
 Twitter: [
   { inserted_date: "21-02-2026", total: 12, active: 6, in_progress: 4, closed: 2 },
   { inserted_date: "22-02-2026", total: 13, active: 7, in_progress: 4, closed: 2 },
@@ -230,7 +228,7 @@ Twitter: [
   { inserted_date: "26-02-2026", total: 13, active: 7, in_progress: 4, closed: 2 },
   { inserted_date: "27-02-2026", total: 11, active: 6, in_progress: 3, closed: 2 },
 ],
- 
+
 Pinterest: [
   { inserted_date: "21-02-2026", total: 12, active: 6, in_progress: 4, closed: 2 },
   { inserted_date: "22-02-2026", total: 11, active: 6, in_progress: 3, closed: 2 },
@@ -240,7 +238,7 @@ Pinterest: [
   { inserted_date: "26-02-2026", total: 12, active: 6, in_progress: 4, closed: 2 },
   { inserted_date: "27-02-2026", total: 12, active: 6, in_progress: 4, closed: 2 },
 ], // 83
- 
+
 Telegram: [
   { inserted_date: "21-02-2026", total: 10, active: 5, in_progress: 3, closed: 2 },
   { inserted_date: "22-02-2026", total: 12, active: 6, in_progress: 4, closed: 2 },
@@ -250,7 +248,7 @@ Telegram: [
   { inserted_date: "26-02-2026", total: 12, active: 6, in_progress: 4, closed: 2 },
   { inserted_date: "27-02-2026", total: 12, active: 6, in_progress: 4, closed: 2 },
 ], // 79
- 
+
 Quora: [
   { inserted_date: "21-02-2026", total: 6, active: 3, in_progress: 2, closed: 1 },
   { inserted_date: "22-02-2026", total: 7, active: 4, in_progress: 2, closed: 1 },
@@ -260,7 +258,7 @@ Quora: [
   { inserted_date: "26-02-2026", total: 7, active: 4, in_progress: 2, closed: 1 },
   { inserted_date: "27-02-2026", total: 6, active: 3, in_progress: 2, closed: 1 },
 ], // 45
- 
+
 Bebee: [
   { inserted_date: "21-02-2026", total: 5, active: 3, in_progress: 1, closed: 1 },
   { inserted_date: "22-02-2026", total: 4, active: 2, in_progress: 1, closed: 1 },
@@ -270,7 +268,7 @@ Bebee: [
   { inserted_date: "26-02-2026", total: 5, active: 3, in_progress: 1, closed: 1 },
   { inserted_date: "27-02-2026", total: 5, active: 3, in_progress: 1, closed: 1 },
 ], // 34
- 
+
 "Kit Job": [
   { inserted_date: "21-02-2026", total: 3, active: 1, in_progress: 1, closed: 1 },
   { inserted_date: "22-02-2026", total: 4, active: 2, in_progress: 1, closed: 1 },
@@ -280,7 +278,7 @@ Bebee: [
   { inserted_date: "26-02-2026", total: 4, active: 2, in_progress: 1, closed: 1 },
   { inserted_date: "27-02-2026", total: 3, active: 1, in_progress: 1, closed: 1 },
 ], // 24
- 
+
 Reddit: [
   { inserted_date: "21-02-2026", total: 2, active: 1, in_progress: 1, closed: 0 },
   { inserted_date: "22-02-2026", total: 2, active: 1, in_progress: 1, closed: 0 },
@@ -290,36 +288,36 @@ Reddit: [
   { inserted_date: "26-02-2026", total: 2, active: 1, in_progress: 1, closed: 0 },
   { inserted_date: "27-02-2026", total: 2, active: 1, in_progress: 1, closed: 0 },
 ], // 15
- 
+
 "App Store": [
   { inserted_date: "21-02-2026", total: 1, active: 1, in_progress: 0, closed: 0 },
   { inserted_date: "24-02-2026", total: 1, active: 1, in_progress: 0, closed: 0 },
   { inserted_date: "27-02-2026", total: 2, active: 1, in_progress: 1, closed: 0 },
 ], // 4
- 
+
 "Web Page": [
   { inserted_date: "25-02-2026", total: 1, active: 1, in_progress: 0, closed: 0 },
 ], // 1
- 
+
 Whatsapp: [
   { inserted_date: "26-02-2026", total: 1, active: 1, in_progress: 0, closed: 0 },
 ], // 1
 };
 
 const Platforms = [
-    { Platform: 'YouTube Videos', count: 190, percentage: 23.81, logo:`${import.meta.env.BASE_URL}channel-logos/Youtube.png` },
-    { Platform: 'Facebook', count: 126, percentage: 15.79, logo: `${import.meta.env.BASE_URL}channel-logos/Facebook.png` },
-    { Platform: 'Instagram', count: 110, percentage: 13.78, logo: `${import.meta.env.BASE_URL}channel-logos/Insta.png` },
-    { Platform: 'Twitter', count: 86, percentage: 10.78, logo: `${import.meta.env.BASE_URL}channel-logos/X.png` },
-    { Platform: 'Pinterest', count: 83, percentage: 10.4, logo: `${import.meta.env.BASE_URL}channel-logos/Pinterest.png` },
-    { Platform: 'Telegram', count: 79, percentage: 9.9, logo: `${import.meta.env.BASE_URL}channel-logos/Telegram.png` },
-    { Platform: 'Quora', count: 45, percentage: 5.64, logo: `${import.meta.env.BASE_URL}channel-logos/Quora.png` },
-    { Platform: 'Bebee', count: 34, percentage: 4.26, logo: `${import.meta.env.BASE_URL}channel-logos/Bebee.png` },
-    { Platform: 'Kit Job', count: 24, percentage: 3.01, logo: `${import.meta.env.BASE_URL}channel-logos/KitJob.png` },
-    { Platform: 'Reddit', count: 15, percentage: 1.88, logo: `${import.meta.env.BASE_URL}channel-logos/Reddit.png` },
-    { Platform: 'App Store', count: 4, percentage: 0.5, logo: `${import.meta.env.BASE_URL}channel-logos/AppStore.png` },
-    { Platform: 'Web Page', count: 1, percentage: 0.13, logo: `${import.meta.env.BASE_URL}channel-logos/WebPage.png` },
-    { Platform: 'Whatsapp', count: 1, percentage: 0.13, logo: `${import.meta.env.BASE_URL}channel-logos/Whatsapp.png` },
+    { Platform: 'YouTube Videos', count: 190, percentage: 23.81, logo: '/channel-logos/Youtube.png' },
+    { Platform: 'Facebook', count: 126, percentage: 15.79, logo: '/channel-logos/Facebook.png' },
+    { Platform: 'Instagram', count: 110, percentage: 13.78, logo: '/channel-logos/Insta.png' },
+    { Platform: 'Twitter', count: 86, percentage: 10.78, logo: '/channel-logos/X.png' },
+    { Platform: 'Pinterest', count: 83, percentage: 10.4, logo: '/channel-logos/Pinterest.png' },
+    { Platform: 'Telegram', count: 79, percentage: 9.9, logo: '/channel-logos/Telegram.png' },
+    { Platform: 'Quora', count: 45, percentage: 5.64, logo: '/channel-logos/Quora.png' },
+    { Platform: 'Bebee', count: 34, percentage: 4.26, logo: '/channel-logos/Bebee.png' },
+    { Platform: 'Kit Job', count: 24, percentage: 3.01, logo: '/channel-logos/KitJob.png' },
+    { Platform: 'Reddit', count: 15, percentage: 1.88, logo: '/channel-logos/Reddit.png' },
+    { Platform: 'App Store', count: 4, percentage: 0.5, logo: '/channel-logos/AppStore.png' },
+    { Platform: 'Web Page', count: 1, percentage: 0.13, logo: '/channel-logos/WebPage.png' },
+    { Platform: 'Whatsapp', count: 1, percentage: 0.13, logo: '/channel-logos/Whatsapp.png' },
 ]
 
 // ─── Aggregation helper ───────────────────────────────────────────────────────
@@ -372,7 +370,6 @@ function aggregateData(data, range) {
     return []
 }
 
-// ─── CSV / PNG export helpers ─────────────────────────────────────────────────
 
 function exportCSV(data, filename) {
     if (!data?.length) return
@@ -423,7 +420,6 @@ function exportPNG(containerRef, filename) {
     }
 }
 
-// ─── Expand Modal ─────────────────────────────────────────────────────────────
 
 function ExpandModal({ title, onClose, children }) {
     useEffect(() => {
@@ -458,7 +454,6 @@ function ExpandModal({ title, onClose, children }) {
     )
 }
 
-// ─── ChartMenu (3-dot button + dropdown) ─────────────────────────────────────
 
 function ChartMenu({ title, csvData, chartRef, onExpand }) {
     const [open, setOpen] = useState(false)
@@ -534,13 +529,12 @@ function ChartMenu({ title, csvData, chartRef, onExpand }) {
     )
 }
 
-// ─── Volume chart helpers ─────────────────────────────────────────────────────
 
 const LEGEND_ITEMS = [
-    { key: 'incidentsReported', label: 'Incidents Reported', color: '#3d5224' },
-    { key: 'underBrandReview', label: 'Under Brand Review', color: '#5E8E12' },
-    { key: 'takedownInitiated', label: 'Takedown Initiated', color: '#b7d586' },
-    { key: 'closedIncidents', label: 'Closed Incidents', color: '#86BC25' },
+    { key: 'incidentsReported', label: 'Incidents Reported', color: '#007680' },
+    { key: 'underBrandReview', label: 'Under Brand Review', color: '#62B5E5' },
+    { key: 'takedownInitiated', label: 'Takedown Initiated', color: '#ED8B00' },
+    { key: 'closedIncidents', label: 'Closed Incidents', color: '#FFCD00' },
 ]
 
 function VolumeTooltip({ active, payload, label }) {
@@ -577,7 +571,6 @@ function VolumeLegend() {
     )
 }
 
-// ─── Shared UI helpers ────────────────────────────────────────────────────────
 
 function FilterButton({ label, options }) {
     const [open, setOpen] = useState(false)
@@ -1210,9 +1203,9 @@ function Dashboard() {
 
             {/* ── Status cards ── */}
             <section className="mb-4 grid gap-3 grid-cols-5">
-                <StatusCard iconSrc={`${import.meta.env.BASE_URL}status-icons/Incidents.png`} value={798} label="Incidents Reported" />
-                <StatusCard iconSrc={`${import.meta.env.BASE_URL}status-icons/underReview.png`} value={798} label="Under Brand Review" />
-                <StatusCard iconSrc={`${import.meta.env.BASE_URL}status-icons/takedown.png`} value={59} label="Closed Incidents" />
+                <StatusCard iconSrc="/status-icons/Incidents.png" value={798} label="Incidents Reported" />
+                <StatusCard iconSrc="/status-icons/underReview.png" value={798} label="Under Brand Review" />
+                <StatusCard iconSrc="/status-icons/takedown.png" value={59} label="Closed Incidents" />
                 <div className="col-span-2">
                     <StatusCard label="Takedown status">
                         <div className="grid grid-cols-3 gap-0.5 border-t border-neutral-200 pt-2 text-center">
@@ -1300,28 +1293,28 @@ function Dashboard() {
 
                             <Bar
                             dataKey="incidentsReported"
-                            fill="#3d5224"
+                            fill="#007680"
                             barSize={18}
                             radius={[0, 0, 0, 0]}
                             />
 
                             <Bar
                             dataKey="takedownInitiated"
-                            fill="#b7d586"
+                            fill="#ED8B00"
                             barSize={18}
                             radius={[0, 0, 0, 0]}
                             />
 
                             <Bar
                             dataKey="closedIncidents"
-                            fill="#86BC25"
+                            fill="#FFCD00"
                             barSize={18}
                             radius={[0, 0, 0, 0]}
                             />
 
                             <Bar
                             dataKey="underBrandReview"
-                            fill="#5E8E12"
+                            fill="#62B5E5"
                             barSize={18}
                             radius={[0, 0, 0, 0]}
                             />
@@ -1379,7 +1372,7 @@ function Dashboard() {
                                 </div>
 
                                 <div className="h-2.5 overflow-hidden  bg-neutral-100">
-                                    <div className="h-full  bg-brand transition-[width] duration-500" style={{ width: `${ch.percentage}%` }} />
+                                    <div className="h-full  bg-[#80C1C5] transition-[width] duration-500" style={{ width: `${ch.percentage}%` }} />
                                 </div>
                             </li>
                         ))}
@@ -1447,7 +1440,7 @@ function Dashboard() {
                                         />
                                         <YAxis type="number" width={30} tick={{ fontSize: 12 }} />
                                         <Tooltip contentStyle={{ backgroundColor: '#fff', border: '1px solid #e5e7eb', borderRadius: '8px', fontSize: '12px' }} formatter={(value) => [value, 'Count']} />
-                                        <Bar dataKey="count" fill="#86bc25" radius={[0, 0, 0, 0]}>
+                                        <Bar dataKey="count" fill="#007680" radius={[0, 0, 0, 0]}>
                                             <LabelList
                                                 dataKey="count"
                                                 position="top"
@@ -1659,28 +1652,28 @@ function Dashboard() {
 
                             <Bar
                             dataKey="incidentsReported"
-                            fill="#3d5224"
-                            barSize={18}
-                            radius={[0, 0, 0, 0]}
-                            />
-
-                            <Bar
-                            dataKey="takedownInitiated"
-                            fill="#b7d586"
-                            barSize={18}
-                            radius={[0, 0, 0, 0]}
-                            />
-
-                            <Bar
-                            dataKey="closedIncidents"
                             fill="#86BC25"
                             barSize={18}
                             radius={[0, 0, 0, 0]}
                             />
 
                             <Bar
+                            dataKey="takedownInitiated"
+                            fill="#ED8B00"
+                            barSize={18}
+                            radius={[0, 0, 0, 0]}
+                            />
+
+                            <Bar
+                            dataKey="closedIncidents"
+                            fill="#FFCD00"
+                            barSize={18}
+                            radius={[0, 0, 0, 0]}
+                            />
+
+                            <Bar
                             dataKey="underBrandReview"
-                            fill="#5E8E12"
+                            fill="#62B5E5"
                             barSize={18}
                             radius={[0, 0, 0, 0]}
                             />

@@ -527,7 +527,7 @@ function ReportView({ result }) {
     fontWeight: activeTab === "dashboard" ? 600 : 500,
   }}
 >
-  Dashboard
+  Social Media Dashboard
 
   {activeTab === "dashboard" && (
     <div

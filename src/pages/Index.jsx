@@ -9,7 +9,7 @@ export default function Index() {
     {
       id: 1,
       name: "Perception Lens - Early Signals",
-      description: "Detects shifts in how your brand is being talked about online before they become a crisis.",
+      description: "AI-powered brand perception monitoring that detects emerging risks, identifies early warning signals, and enables proactive crisis management.",
       category: "Brand Perception AI - Early Signals",
       key: "/brand-perception",
       icon: "ti-eye",
