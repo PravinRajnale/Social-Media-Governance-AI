@@ -4,7 +4,7 @@ import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
   PieChart, Pie, Cell, AreaChart, Area,
 } from "recharts";
-import { INCIDENTS_INITIAL } from "./WebIncidents";
+import { INCIDENTS_INITIAL } from "../mock/IncidentsData.js";
 
 
 const C = {

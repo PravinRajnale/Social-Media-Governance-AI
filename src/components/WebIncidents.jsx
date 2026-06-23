@@ -7,7 +7,7 @@ import {
   ChevronDown,
 } from "lucide-react";
 import { fontString } from "chart.js/helpers";
-import {INCIDENTS_INITIAL} from "../mock/IncidentsData.js"
+import {INCIDENTS_INITIAL} from "../mock/IncidentsData.js";
 
 function downloadCSV(data, filename) {
   if (!data?.length) return;
