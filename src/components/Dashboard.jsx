@@ -107,7 +107,7 @@ const summaryCards = [
         label: 'Suspicious Website / App',
         value: 123,
         pct: 15.41,
-        iconSrc: '/summary-icons/websites.png',
+        iconSrc: `${process.env.PUBLIC_URL}/summary-icons/websites.png`,
         redirectTo: '/web-summary',
         accent: '#D85A30',
         ringBg: 'rgba(216,90,48,0.12)',
@@ -116,7 +116,7 @@ const summaryCards = [
         label: 'Suspicious Social Media Handles',
         value: 675,
         pct: 84.59,
-        iconSrc: '/summary-icons/socialMedia.png',
+        iconSrc: `${process.env.PUBLIC_URL}/summary-icons/socialMedia.png`,
         redirectTo: '/web-summary',
         accent: '#378ADD',
         ringBg: 'rgba(55,138,221,0.12)',
@@ -125,7 +125,7 @@ const summaryCards = [
         label: 'Suspicious Customer Care Numbers',
         value: 24,
         pct: 3.01,
-        iconSrc: '/summary-icons/customerCare.png',
+        iconSrc: `${process.env.PUBLIC_URL}/summary-icons/customerCare.png`,
         redirectTo: '/web-summary',
         accent: '#cf7759',
        ringBg: 'rgba(207,119,89,0.12)'
@@ -134,7 +134,7 @@ const summaryCards = [
         label: 'Suspicious Job Promotions',
         value: 161,
         pct: 20.18,
-        iconSrc: '/summary-icons/jobPromotions.png',
+        iconSrc: `${process.env.PUBLIC_URL}/summary-icons/jobPromotions.png`,
         redirectTo: '/web-summary',
         accent: '#BA7517',
         ringBg: 'rgba(186,117,23,0.12)',
@@ -143,7 +143,7 @@ const summaryCards = [
         label: 'Suspicious Offers',
         value: 62,
         pct: 7.77,
-        iconSrc: '/summary-icons/offers.png',
+        iconSrc: `${process.env.PUBLIC_URL}/summary-icons/offers.png`,
         redirectTo: '/web-summary',
         accent: '#1D9E75',
         ringBg: 'rgba(29,158,117,0.12)',
@@ -152,7 +152,7 @@ const summaryCards = [
         label: 'Suspicious Sponsored Ads',
         value: 10,
         pct: 1.25,
-        iconSrc: '/summary-icons/ads.png',
+        iconSrc: `${process.env.PUBLIC_URL}/summary-icons/ads.png`,
         redirectTo: '/web-summary',
         accent: '#534AB7',
         ringBg: 'rgba(83,74,183,0.12)',
@@ -305,19 +305,19 @@ Whatsapp: [
 };
 
 const Platforms = [
-    { Platform: 'YouTube Videos', count: 190, percentage: 23.81, logo: '/channel-logos/Youtube.png' },
-    { Platform: 'Facebook', count: 126, percentage: 15.79, logo: '/channel-logos/Facebook.png' },
-    { Platform: 'Instagram', count: 110, percentage: 13.78, logo: '/channel-logos/Insta.png' },
-    { Platform: 'Twitter', count: 86, percentage: 10.78, logo: '/channel-logos/X.png' },
-    { Platform: 'Pinterest', count: 83, percentage: 10.4, logo: '/channel-logos/Pinterest.png' },
-    { Platform: 'Telegram', count: 79, percentage: 9.9, logo: '/channel-logos/Telegram.png' },
-    { Platform: 'Quora', count: 45, percentage: 5.64, logo: '/channel-logos/Quora.png' },
-    { Platform: 'Bebee', count: 34, percentage: 4.26, logo: '/channel-logos/Bebee.png' },
-    { Platform: 'Kit Job', count: 24, percentage: 3.01, logo: '/channel-logos/KitJob.png' },
-    { Platform: 'Reddit', count: 15, percentage: 1.88, logo: '/channel-logos/Reddit.png' },
-    { Platform: 'App Store', count: 4, percentage: 0.5, logo: '/channel-logos/AppStore.png' },
-    { Platform: 'Web Page', count: 1, percentage: 0.13, logo: '/channel-logos/WebPage.png' },
-    { Platform: 'Whatsapp', count: 1, percentage: 0.13, logo: '/channel-logos/Whatsapp.png' },
+    { Platform: 'YouTube Videos', count: 190, percentage: 23.81, logo: `${process.env.PUBLIC_URL}/channel-logos/Youtube.png` },
+    { Platform: 'Facebook', count: 126, percentage: 15.79, logo: `${process.env.PUBLIC_URL}/channel-logos/Facebook.png` },
+    { Platform: 'Instagram', count: 110, percentage: 13.78, logo: `${process.env.PUBLIC_URL}/channel-logos/Insta.png` },
+    { Platform: 'Twitter', count: 86, percentage: 10.78, logo: `${process.env.PUBLIC_URL}/channel-logos/X.png` },
+    { Platform: 'Pinterest', count: 83, percentage: 10.4, logo: `${process.env.PUBLIC_URL}/channel-logos/Pinterest.png` },
+    { Platform: 'Telegram', count: 79, percentage: 9.9, logo: `${process.env.PUBLIC_URL}/channel-logos/Telegram.png` },
+    { Platform: 'Quora', count: 45, percentage: 5.64, logo: `${process.env.PUBLIC_URL}/channel-logos/Quora.png` },
+    { Platform: 'Bebee', count: 34, percentage: 4.26, logo: `${process.env.PUBLIC_URL}/channel-logos/Bebee.png` },
+    { Platform: 'Kit Job', count: 24, percentage: 3.01, logo: `${process.env.PUBLIC_URL}/channel-logos/KitJob.png` },
+    { Platform: 'Reddit', count: 15, percentage: 1.88, logo: `${process.env.PUBLIC_URL}/channel-logos/Reddit.png` },
+    { Platform: 'App Store', count: 4, percentage: 0.5, logo: `${process.env.PUBLIC_URL}/channel-logos/AppStore.png` },
+    { Platform: 'Web Page', count: 1, percentage: 0.13, logo: `${process.env.PUBLIC_URL}/channel-logos/WebPage.png` },
+    { Platform: 'Whatsapp', count: 1, percentage: 0.13, logo: `${process.env.PUBLIC_URL}/channel-logos/Whatsapp.png` },
 ]
 
 // ─── Aggregation helper ───────────────────────────────────────────────────────
@@ -1203,9 +1203,9 @@ function Dashboard() {
 
             {/* ── Status cards ── */}
             <section className="mb-4 grid gap-3 grid-cols-5">
-                <StatusCard iconSrc="/status-icons/Incidents.png" value={798} label="Incidents Reported" />
-                <StatusCard iconSrc="/status-icons/underReview.png" value={798} label="Under Brand Review" />
-                <StatusCard iconSrc="/status-icons/takedown.png" value={59} label="Closed Incidents" />
+                <StatusCard iconSrc={`${process.env.PUBLIC_URL}/status-icons/Incidents.png`} value={798} label="Incidents Reported" />
+                <StatusCard iconSrc={`${process.env.PUBLIC_URL}/status-icons/underReview.png`} value={798} label="Under Brand Review" />
+                <StatusCard iconSrc={`${process.env.PUBLIC_URL}/status-icons/takedown.png`} value={59} label="Closed Incidents" />
                 <div className="col-span-2">
                     <StatusCard label="Takedown status">
                         <div className="grid grid-cols-3 gap-0.5 border-t border-neutral-200 pt-2 text-center">
