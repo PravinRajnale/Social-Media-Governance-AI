@@ -587,13 +587,13 @@ export default function WebSummary() {
       {/* ── Status Cards ── */}
       <section className="mb-3 grid gap-3 grid-cols-3">
         <Link to="/web-incidents" className="block transition hover:shadow-lg focus:outline-none">
-          <StatusCard iconSrc={`${process.env.PUBLIC_URL}/status-icons/incidents.png`}value={INCIDENTS_INITIAL.length} label="Incidents Reported" />
+          <StatusCard iconSrc={`${import.meta.env.BASE_URL}/status-icons/incidents.png`}value={INCIDENTS_INITIAL.length} label="Incidents Reported" />
         </Link>
         <Link to="/web-incidents" className="block transition hover:shadow-lg focus:outline-none">
-          <StatusCard iconSrc={`${process.env.PUBLIC_URL}/status-icons/underReview.png`} value={INCIDENTS_INITIAL.length} label="Under Brand Review" />
+          <StatusCard iconSrc={`${import.meta.env.BASE_URLL}/status-icons/underReview.png`} value={INCIDENTS_INITIAL.length} label="Under Brand Review" />
         </Link>
         <Link to="/web-incidents" className="block transition hover:shadow-lg focus:outline-none">
-          <StatusCard iconSrc={`${process.env.PUBLIC_URL}/status-icons/takedown.png`} value={INCIDENTS_INITIAL.filter(i => i.ticketStatus === "Resolved").length} label="Closed Incidents" />
+          <StatusCard iconSrc={`${import.meta.env.BASE_URL}/status-icons/takedown.png`} value={INCIDENTS_INITIAL.filter(i => i.ticketStatus === "Resolved").length} label="Closed Incidents" />
         </Link>
         {/* <div className="col-span-2">
          <StatusCard label="Takedown Status">
